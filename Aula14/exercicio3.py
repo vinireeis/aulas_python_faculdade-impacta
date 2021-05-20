@@ -27,7 +27,7 @@ class Funcionario(Base):
         self.salario = salario
 
 
-# Cria um arquivo de textopygame.examples.mask.main()
+# Cria um arquivo de texto
 arquivo = open('saida.txt', 'w', encoding='UTF-8')
 
 # Realiza consulta no banco de dados
@@ -35,6 +35,6 @@ resultado = session.query(Funcionario).order_by(Funcionario.nome).all()  # all o
 for r in resultado:
     arquivo.write(r.nome.upper() + ';' + str(r.idade) + '-' + str(r.salario) + '\n')
 
-#  Fechando arquivo e conexão com bancopygame.examples.mask.main()
+#  Fechando arquivo e conexão com banco
 arquivo.close()
 connection.close()

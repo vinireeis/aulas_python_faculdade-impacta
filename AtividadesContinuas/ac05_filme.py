@@ -70,6 +70,7 @@ class BancoDeDados:
         Recebe um objeto Filme e armazena esse
         objeto no banco de dados.
         '''
+        self.filme = filme
         session.add(filme)
         session.commit()
 
@@ -78,6 +79,7 @@ class BancoDeDados:
         Recebe uma lista de objetos Filme e armazena esses
         objetos no banco de dados
         '''
+        self.filmes = filmes
         session.add_all(filmes)
         session.commit()
 
@@ -101,7 +103,13 @@ class BancoDeDados:
         lista de objetos Filme com todos os registros,
         ordenados de forma crescente pelo titulo.
         '''
-        pass
+        lista = []
+        resultado = session.query(Filme).order_by(Filme.titulo).all()
+        for r in resultado:
+            lista.append(r)
+        return lista
+        '''resultado = session.query(Filme).order_by(Filme.titulo).all()
+        return resultado'''
 
     def buscar_por_id(self, id):
         '''
@@ -170,7 +178,7 @@ class BancoDeDados:
         titulo;ano;genero;duracao;país;diretor;elenco;avaliacao;votos
         '''
         self.nome_arquivo = nome_arquivo
-        arquivo = open(nome_arquivo)
+        arquivo = open(nome_arquivo, 'r', encoding='UTF-8')
         lista_filmes = []
 
         for linha in arquivo:
@@ -187,13 +195,13 @@ banco = BancoDeDados()
 banco.criar_tabela()
 '''banco.importar_filmes('movies.txt')'''
 
-'''
+
 # Busca todos os filmes
 lista = banco.buscar_todos()
 print('-'*60)
-for f in lista:         # exibe lista de filmes
-    print(f.id, f.titulo, f.ano, f.genero, f.duracao, f.pais, f.diretor, f.elenco, f.avaliacao, f.votos)
-
+for f in lista:  # exibe lista de filmes
+    print(f.id, f.titulo, f.ano, f.genero, f.duracao, f.pais, f.diretor, f.elenco, f.avaliacao, f.votos, '\n')
+'''
 # Busca por ano
 lista = banco.buscar_por_ano(2019)
 print('-'*60)

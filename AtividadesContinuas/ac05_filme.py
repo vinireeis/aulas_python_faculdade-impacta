@@ -137,7 +137,7 @@ class BancoDeDados:
         '''
         lista = []
         self.ano = ano
-        resultado = session.query(Filme).filter(Filme.ano == ano)
+        resultado = session.query(Filme).filter(Filme.ano == ano).order_by(Filme.id)
         for r in resultado:
             lista.append(r)
         return lista
@@ -150,7 +150,7 @@ class BancoDeDados:
         '''
         lista = []
         self.genero = genero
-        resultado = session.query(Filme).filter(Filme.genero.like('%' + genero + '%'))
+        resultado = session.query(Filme).filter(Filme.genero.like('%' + genero + '%')).order_by(Filme.titulo)
         for r in resultado:
             lista.append(r)
         return lista
@@ -163,7 +163,7 @@ class BancoDeDados:
         '''
         lista = []
         self.ator = ator
-        resultado = session.query(Filme).filter(Filme.elenco.like('%' + ator + '%'))
+        resultado = session.query(Filme).filter(Filme.elenco.like('%' + ator + '%')).order_by(Filme.ano)
         for r in resultado:
             lista.append(r)
         return lista

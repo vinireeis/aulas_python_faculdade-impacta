@@ -88,6 +88,8 @@ class BancoDeDados:
         Recebe um objeto filme e altera sua avaliação de
         acordo com o valor do parametro avaliacao
         '''
+        self.filme = filme
+        self.avaliacao = avaliacao
         pass
 
     def excluir(self, id):
@@ -95,7 +97,11 @@ class BancoDeDados:
         Recebe o id de um filme e exclui o filme correspondente
         do banco de dados
         '''
-        pass
+        self.id = id
+        resultado = session.query(Filme).get(id)
+        if resultado is not None:
+            session.delete(resultado)
+            session.commit()
 
     def buscar_todos(self):
         '''
@@ -112,11 +118,15 @@ class BancoDeDados:
         return resultado'''
 
     def buscar_por_id(self, id):
+
         '''
         Realiza busca no banco de dados e retorna um
         objeto Filme de acordo com o seu id
         '''
-        pass
+        self.id = id
+        resultado = session.query(Filme).get(id)
+        if resultado is not None:
+            return resultado
 
     def buscar_por_ano(self, ano):
         '''
@@ -124,7 +134,12 @@ class BancoDeDados:
         lista de objetos Filme de um ano específico,
         ordenado pelo ID de forma crescente
         '''
-        pass
+        lista = []
+        self.ano = ano
+        resultado = session.query(Filme).filter(Filme.ano == ano)
+        for r in resultado:
+            lista.append(r)
+        return lista
 
     def buscar_por_genero(self, genero):
         '''
@@ -132,7 +147,9 @@ class BancoDeDados:
         lista de objetos Filme de um gênero específico,
         ordenados pelo titulo de forma crescente
         '''
-        pass
+        self.genero = genero
+        resultado = session.query(Filme).filter(Filme.genero.like('%genero%'))
+        return resultado
 
     def buscar_por_elenco(self, ator):
         '''
@@ -140,7 +157,9 @@ class BancoDeDados:
         lista de objetos Filme que tenha um determinado ator/atriz como parte
         do elenco, ordenados pelo ano de lançamento em ordem crescente
         '''
-        pass
+        self.ator = ator
+        resultado = session.query(Filme).filter(Filme.elenco.like(ator)).order_by(Filme.ano)
+        return resultado
 
     def buscar_melhores_do_ano(self, ano):
         '''
@@ -151,7 +170,9 @@ class BancoDeDados:
         DICA - utilize a função:
             .order_by(desc(Filme.avaliacao))
         '''
-        pass
+        self.ano = ano
+        resultado = session.query(Filme).filter(Filme.ano == ano and Filme.avaliacao >= 90).order_by(desc(Filme.avaliacao))
+        return resultado
 
     def exportar_filmes(self, nome_arquivo):
         '''
@@ -193,15 +214,20 @@ class BancoDeDados:
 # EXEMPLO DE PROGRAMA PRINCIPAL
 banco = BancoDeDados()
 banco.criar_tabela()
-'''banco.importar_filmes('movies.txt')'''
+banco.importar_filmes('movies.txt')
 
 
 # Busca todos os filmes
-lista = banco.buscar_todos()
+'''lista = banco.buscar_todos()
 print('-'*60)
 for f in lista:  # exibe lista de filmes
-    print(f.id, f.titulo, f.ano, f.genero, f.duracao, f.pais, f.diretor, f.elenco, f.avaliacao, f.votos, '\n')
-'''
+    print(f.id, f.titulo, f.ano, f.genero, f.duracao, f.pais, f.diretor, f.elenco, f.avaliacao, f.votos, '\n')'''
+
+#incluindo um filme com ano de 2019
+ReiLeao = Filme('O Rei leão', 2019, 'Animação, Aventura', 120, 'Brasil', 'Jon Fraveau', 'Ícaro Silva, Glauco Marques, Ivan Parente', 85, 599)
+banco.incluir(ReiLeao)
+
+
 # Busca por ano
 lista = banco.buscar_por_ano(2019)
 print('-'*60)
@@ -215,7 +241,7 @@ for f in lista:         # exibe lista de filmes
     print(f.id, f.titulo, f.ano, f.genero)
 
 # Busca por elenco
-lista = banco.buscar_por_elenco('Nicole')
+'''lista = banco.buscar_por_elenco('Nicole')
 print('-'*60)
 for f in lista:         # exibe lista de filmes
     print(f.id, f.titulo, f.ano, f.genero, f.duracao, f.pais, f.diretor, f.elenco, f.avaliacao, f.votos)

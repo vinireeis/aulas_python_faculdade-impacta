@@ -50,7 +50,7 @@ class Filme(Base):
 
 
 # Classe para interação com o Banco de Dados
-class BancoDeDados:
+class BancoDeDados: 
     def criar_tabela(self):
         # Cria a tabela FILME no banco de dados
         connection.execute("""CREATE TABLE IF NOT EXISTS FILME(
@@ -147,19 +147,25 @@ class BancoDeDados:
         lista de objetos Filme de um gênero específico,
         ordenados pelo titulo de forma crescente
         '''
+        lista = []
         self.genero = genero
-        resultado = session.query(Filme).filter(Filme.genero.like('%genero%'))
-        return resultado
+        resultado = session.query(Filme).filter(Filme.genero.like('%' + genero))
+        for r in resultado:
+            lista.append(r)
+        return lista
 
-    def buscar_por_elenco(self, ator):
+    def buscar_por_elenco(self, elenco):
         '''
         Realiza busca no banco de dados e retorna uma
         lista de objetos Filme que tenha um determinado ator/atriz como parte
         do elenco, ordenados pelo ano de lançamento em ordem crescente
         '''
-        self.ator = ator
-        resultado = session.query(Filme).filter(Filme.elenco.like(ator)).order_by(Filme.ano)
-        return resultado
+        lista = []
+        self.elenco = elenco
+        resultado = session.query(Filme).filter(Filme.elenco.like('%' + elenco))
+        for r in resultado:
+            lista.append(r)
+        return lista
 
     def buscar_melhores_do_ano(self, ano):
         '''
@@ -170,9 +176,12 @@ class BancoDeDados:
         DICA - utilize a função:
             .order_by(desc(Filme.avaliacao))
         '''
+        lista = []
         self.ano = ano
-        resultado = session.query(Filme).filter(Filme.ano == ano and Filme.avaliacao >= 90).order_by(desc(Filme.avaliacao))
-        return resultado
+        resultado = session.query(Filme).filter(Filme.ano == int(ano) and Filme.avaliacao > 89.9).order_by(desc(Filme.avaliacao))
+        for r in resultado:
+            lista.append(r)
+        return lista
 
     def exportar_filmes(self, nome_arquivo):
         '''
@@ -223,28 +232,28 @@ print('-'*60)
 for f in lista:  # exibe lista de filmes
     print(f.id, f.titulo, f.ano, f.genero, f.duracao, f.pais, f.diretor, f.elenco, f.avaliacao, f.votos, '\n')'''
 
-#incluindo um filme com ano de 2019
-ReiLeao = Filme('O Rei leão', 2019, 'Animação, Aventura', 120, 'Brasil', 'Jon Fraveau', 'Ícaro Silva, Glauco Marques, Ivan Parente', 85, 599)
-banco.incluir(ReiLeao)
+# Incluindo um filme com ano de 2019
+'''ReiLeao = Filme('O Rei leão', 2019, 'Animação, Aventura', 120, 'Brasil', 'Jon Fraveau', 'Ícaro Silva, Glauco Marques, Ivan Parente', 85, 599)
+banco.incluir(ReiLeao)'''
 
 
 # Busca por ano
-lista = banco.buscar_por_ano(2019)
+'''lista = banco.buscar_por_ano(2019)
 print('-'*60)
 for f in lista:         # exibe lista de filmes
-    print(f.id, f.titulo, f.ano, f.genero, f.duracao, f.pais, f.diretor, f.elenco, f.avaliacao, f.votos)
+    print(f.id, f.titulo, f.ano, f.genero, f.duracao, f.pais, f.diretor, f.elenco, f.avaliacao, f.votos)'''
 
 # Busca por genero
-lista = banco.buscar_por_genero('Crime')
+'''lista = banco.buscar_por_genero('Crime')
 print('-'*60)
 for f in lista:         # exibe lista de filmes
     print(f.id, f.titulo, f.ano, f.genero)
 
 # Busca por elenco
-'''lista = banco.buscar_por_elenco('Nicole')
+lista = banco.buscar_por_elenco('Nicole')
 print('-'*60)
 for f in lista:         # exibe lista de filmes
-    print(f.id, f.titulo, f.ano, f.genero, f.duracao, f.pais, f.diretor, f.elenco, f.avaliacao, f.votos)
+    print(f.id, f.titulo, f.ano, f.genero, f.duracao, f.pais, f.diretor, f.elenco, f.avaliacao, f.votos)'''
 
 # Busca melhores do ano
 lista = banco.buscar_melhores_do_ano('2019')
@@ -253,4 +262,4 @@ for f in lista:         # exibe lista de filmes
     print(f.id, f.titulo, f.ano, f.genero, f.duracao, f.pais, f.diretor, f.elenco, f.avaliacao, f.votos)
 
 
-banco.exportar_filmes('saida.txt')'''
+'''banco.exportar_filmes('saida.txt')'''

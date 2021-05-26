@@ -74,7 +74,7 @@ class BancoDeDados:
         session.add(filme)
         session.commit()
 
-    def incluir_lista(self, filmes):
+    def incluir_lista(self, filmes):  # preciso testar!!!
         '''
         Recebe uma lista de objetos Filme e armazena esses
         objetos no banco de dados
@@ -230,7 +230,7 @@ banco.criar_tabela()
 
 
 # Busca todos os filmes
-'''lista = banco.buscar_todos()
+lista = banco.buscar_todos()
 print('-'*60)
 for f in lista:  # exibe lista de filmes
     print(f.id, f.titulo, f.ano, f.genero, f.duracao, f.pais, f.diretor, f.elenco, f.avaliacao, f.votos, '\n')

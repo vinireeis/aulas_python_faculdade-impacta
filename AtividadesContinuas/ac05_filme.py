@@ -316,3 +316,8 @@ print('-' * 60)
 
 # Exportar para um arquivo todos os filmes do banco
 banco.exportar_filmes('saida.txt')
+
+# Altera a avalação do filme de id 7 para 98
+filme = banco.buscar_por_id(7)
+if filme is not None:
+    banco.alterar_avaliacao(filme, 98)

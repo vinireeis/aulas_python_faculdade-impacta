@@ -277,4 +277,5 @@ print('-' * 60)
 f = banco.excluir(1002)
 print('-' * 60)
 
+# Exportar para um arquivo todos os filmes do banco
 banco.exportar_filmes('saida.txt')

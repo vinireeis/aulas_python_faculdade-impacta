@@ -64,33 +64,37 @@ class BancoDeDados:
         Recebe um objeto Filme e armazena esse
         objeto no banco de dados.
         '''
-        self.filme = filme
         session.add(filme)
         session.commit()
+        print('Filme incluído com sucesso')
+        print('-' * 60)
 
     def incluir_lista(self, filmes):
         '''
         Recebe uma lista de objetos Filme e armazena esses
         objetos no banco de dados
         '''
-        self.filmes = filmes
         session.add_all(filmes)
         session.commit()
+        print('Lista de filmes incluída com sucesso')
+        print('-' * 60)
 
     def alterar_avaliacao(self, filme, avaliacao):
-        '''resultado = session.query(Filme).filter(Filme.titulo == filme)
-            return resultado.avaliacao = avaliacao
+        '''
         Recebe um objeto filme e altera sua avaliação de
         acordo com o valor do parametro avaliacao
         '''
-        pass
+        resultado = session.query(Filme).get(filme.id)
+        resultado.avaliacao = avaliacao
+        session.commit()
+        print(f"O filme '{filme.titulo}' teve sua avaliação alterada para: " + str(avaliacao))
+        print('-' * 60)
 
     def excluir(self, id):
         '''
         Recebe o id de um filme e exclui o filme correspondente
         do banco de dados
         '''
-        self.id = id
         resultado = session.query(Filme).get(id)
         if resultado is not None:
             print(f'ID: {resultado.id}\nTítulo: {resultado.titulo}\nEste filme está sendo excluído...')
@@ -122,9 +126,10 @@ class BancoDeDados:
         r = session.query(Filme).get(id)
         print('-' * 60)
         if r is not None:
-            print(f'ID: {r.id} \nTítulo: {r.titulo} \nAno: {r.ano} \nGenero: {r.genero}')
+            print(f'ID: {r.id} \nTítulo: {r.titulo} \nAno: {r.ano} \nGenero: {r.genero} \nAvaliacao:{r.avaliacao}')
         else:
             print('Não existe filme com este ID')
+        return r
 
     def buscar_por_ano(self, ano):
         '''
@@ -226,55 +231,87 @@ banco = BancoDeDados()
 banco.criar_tabela()
 banco.importar_filmes('movies.txt')
 
+# Cria um novo Filme e insere no banco de dados
+filme1 = Filme("Parasite", 2019, "Comedy, Drama, Thriller", 132, "Korea", "Bong Joon Ho", "Song Kang-ho, Jang Hye-jin, Choi Woo-shik", 92, 40273)
+banco.incluir(filme1)
+
+filme2 = Filme("Joker", 2019, 'Crime, Drama, Thriller', 122, "USA", "Todd Phillips", "Joaquin Phoenix, Robert De Niro, Zazie Beetz", 91, 78481)
+filme3 = Filme("Avengers: Endgame", 2019, 'Drama, Thriller', 181, "USA", "Anthony Russo, Joe Russo", "Robert Downey Jr., Chris Evans, Mark Ruffalo", 93, 715250)
+lista_filmes = [filme2, filme3]
+banco.incluir_lista(lista_filmes)
+
 # Incluindo um filme com ano de 2019 e avaliação acima de 90
 ReiLeao = Filme('O Rei leão', 2019, 'Animação, Aventura', 120, 'Brasil', 'Jon Fraveau', 'Ícaro Silva, Glauco Marques, Ivan Parente', 99, 599)
 banco.incluir(ReiLeao)
 
 # Incluindo uma lista de filmes com avaliação acima de 90
-Vingadores = Filme('Vingadores: Ultimato', 2019, 'Ação, Fantasia, Aventura', 180, 'EUA', 'Joe Russo, Anthony Russo', 'Robert Downey Jr., Chris Evans, Mark Ruffalo', 100, 2578)
+Vingadores = Filme('Vingadores: Ultimato', 2019, 'Ação, Fantasia, Aventura', 180, 'EUA', 'Joe Russo, Anthony Russo', 'Robert Downey Jr., Chris Evans, Mark Ruffalo', 91, 2578)
 Eternos = Filme('Os Eternos', 2021, 'Ficção científica, Fantasia, Ação', 150, 'EUA', 'Chloé Zhao', 'Angelina Jolie, Richard Madden, Salma Hayek', 95, 678)
 Mortal = Filme('Mortal Kombat', 2021, 'Animação, Aventura', 110, 'EUA', 'Simon McQuoid', 'Lewis Tan, Jessica McNamee, Josh Lawson', 92, 544)
 lista_filmes = [Vingadores, Eternos, Mortal]
 banco.incluir_lista(lista_filmes)
-print('Estes são os filmes incluídos:')
-for f in lista_filmes:
-    print(f'\nID: {f.id} \nTítulo: {f.titulo} \nAno: {f.ano} \nGenero: {f.genero}')
+
+# Altera a avalação do filme de id 7 para 98
+filme = banco.buscar_por_id(7)
+if filme is not None:
+    banco.alterar_avaliacao(filme, 98)
+filme = banco.buscar_por_id(7)
+
+# Exclui o filme de id 6
+banco.excluir(6)
 
 # Busca todos os filmes
 lista = banco.buscar_todos()
 print('-'*60)
 for f in lista:  # exibe lista de filmes
-    print(f.id, f.titulo, f.ano, f.genero, f.duracao, f.pais, f.diretor, f.elenco, f.avaliacao, f.votos, '\n')
+    print(f.id, f.titulo, f.ano, f.genero, f.duracao, f.pais, f.diretor, f.elenco, f.avaliacao, f.votos)
 
+# Busca todos os filmes do ano de 2019
 lista = banco.buscar_por_ano(2019)
 print('-'*60)
 for f in lista:         # exibe lista de filmes
-    print(f.id, f.titulo, f.ano, f.genero, f.duracao, f.pais, f.diretor, f.elenco, f.avaliacao, f.votos)
+    print(f.id, f.titulo, f.ano)
 
 # Busca por genero
-lista = banco.buscar_por_genero('Romance')
+lista = banco.buscar_por_genero('Crime')
 print('-'*60)
 for f in lista:         # exibe lista de filmes
     print(f.id, f.titulo, f.ano, f.genero)
 
-# Busca por ator
-lista = banco.buscar_por_elenco('Will')
+# Busca todos os filmes com participação da atriz de nome 'Nicole Balsam'
+lista = banco.buscar_por_elenco('Nicole Balsam')
 print('-'*60)
 for f in lista:         # exibe lista de filmes
-    print(f.id, f.titulo, f.ano, f.genero, f.duracao, f.pais, f.diretor, f.elenco, f.avaliacao, f.votos)
+    print(f.id, f.titulo, f.ano, f.elenco)
 
 # Busca melhores do ano
 lista = banco.buscar_melhores_do_ano('2019')
 print('-'*60)
 for f in lista:         # exibe lista de filmes
-    print(f.id, f.titulo, f.ano, f.genero, f.duracao, f.pais, f.diretor, f.elenco, f.avaliacao, f.votos)
+    print(f.id, f.titulo, f.ano, f.avaliacao)
 
 # Buscar por id
-f = banco.buscar_por_id(1002)
+f = banco.buscar_por_id(50)
 print('-' * 60)
 
 # Excluir por id
-f = banco.excluir(1002)
+f = banco.excluir(37)
+print('-' * 60)
+
+# Alterando avaliacao de um filme
+print('-' * 60)
+print(f'Título: {Vingadores.titulo} e avaliação: {Vingadores.avaliacao}')
+print('-' * 60)
+f = banco.alterar_avaliacao(Vingadores, 100)
+
+# mostrando os filmes adicionados
+f = banco.buscar_por_id(1001)
+print('-' * 60)
+f = banco.buscar_por_id(1002)
+print('-' * 60)
+f = banco.buscar_por_id(1003)
+print('-' * 60)
+f = banco.buscar_por_id(1004)
 print('-' * 60)
 
 # Exportar para um arquivo todos os filmes do banco

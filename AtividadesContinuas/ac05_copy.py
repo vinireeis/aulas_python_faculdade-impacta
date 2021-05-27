@@ -3,6 +3,11 @@
 # NOMES DOS ALUNOS: (MÁXIMO 6):
 # ALUNO 1: Vinicius Dos Reis Oliveira RA 1701731
 # ALUNO 2: Karina Watanabe
+# ALUNO 3: nome
+# ALUNO 4: nome
+# ALUNO 5: nome
+# ALUNO 6: nome
+
 
 import sqlalchemy
 
@@ -29,6 +34,7 @@ class Filme(Base):
     elenco = Column('ELENCO', String(255), nullable=True)
     avaliacao = Column('AVALIACAO', Float, nullable=True)
     votos = Column('VOTOS', Integer, nullable=True)
+    # FAZER O MAPEAMENTO DA TABELA
 
     # Método construtor
     def __init__(self, titulo, ano, genero, duracao, pais, diretor, elenco, avaliacao, votos):
@@ -68,7 +74,7 @@ class BancoDeDados:
         session.add(filme)
         session.commit()
 
-    def incluir_lista(self, filmes):
+    def incluir_lista(self, filmes):  # preciso testar!!!
         '''
         Recebe uma lista de objetos Filme e armazena esses
         objetos no banco de dados
@@ -78,11 +84,13 @@ class BancoDeDados:
         session.commit()
 
     def alterar_avaliacao(self, filme, avaliacao):
-        '''resultado = session.query(Filme).filter(Filme.titulo == filme)
-            return resultado.avaliacao = avaliacao
+        '''
         Recebe um objeto filme e altera sua avaliação de
         acordo com o valor do parametro avaliacao
         '''
+        self.filme = filme
+        # fazer uma busca com o valor da variavel filme e achar um objeto filme para assim alterar a avaliação
+        self.avaliacao = avaliacao
         pass
 
     def excluir(self, id):
@@ -93,13 +101,8 @@ class BancoDeDados:
         self.id = id
         resultado = session.query(Filme).get(id)
         if resultado is not None:
-            print(f'ID: {resultado.id}\nTítulo: {resultado.titulo}\nEste filme está sendo excluído...')
-        resultado = session.query(Filme).get(id)
-        if resultado is not None:
-            print('-' * 60)
             session.delete(resultado)
             session.commit()
-            print('Filme excluído com sucesso')
 
     def buscar_todos(self):
         '''
@@ -112,19 +115,19 @@ class BancoDeDados:
         for r in resultado:
             lista.append(r)
         return lista
+        '''resultado = session.query(Filme).order_by(Filme.titulo).all()
+        return resultado'''
 
-    def buscar_por_id(self, id):
+    def buscar_por_id(self, id):  # preciso testar!!!
+
         '''
         Realiza busca no banco de dados e retorna um
         objeto Filme de acordo com o seu id
         '''
         self.id = id
-        r = session.query(Filme).get(id)
-        print('-' * 60)
-        if r is not None:
-            print(f'ID: {r.id} \nTítulo: {r.titulo} \nAno: {r.ano} \nGenero: {r.genero}')
-        else:
-            print('Não existe filme com este ID')
+        resultado = session.query(Filme).get(id)
+        if resultado is not None:
+            return resultado
 
     def buscar_por_ano(self, ano):
         '''
@@ -176,6 +179,7 @@ class BancoDeDados:
         '''
         lista = []
         self.ano = ano
+        '''resultado = session.query(Filme).filter(Filme.ano == int(ano) and Filme.avaliacao > 89.9).order_by(desc(Filme.avaliacao))'''
         resultado = session.query(Filme).filter(Filme.ano == int(ano)).order_by(desc(Filme.avaliacao))
         for r in resultado:
             if r.avaliacao >= 90:
@@ -195,9 +199,7 @@ class BancoDeDados:
 
         for r in resultado:
             arquivo.write(r.titulo + ';' + str(r.ano) + ';' + r.genero + ';' + str(r.duracao) + ';' + r.pais + ';' + r.diretor + ';' + r.elenco + ';' + str(r.avaliacao) + ';' + str(r.votos) + '\n')
-        print('-'*60)
-        print(f'Arquivo exportado com sucesso com o nome de {nome_arquivo}')
-        print('-'*60)
+
         arquivo.close()
         connection.close()
 
@@ -224,21 +226,8 @@ class BancoDeDados:
 # EXEMPLO DE PROGRAMA PRINCIPAL
 banco = BancoDeDados()
 banco.criar_tabela()
-banco.importar_filmes('movies.txt')
+'''banco.importar_filmes('movies.txt')'''
 
-# Incluindo um filme com ano de 2019 e avaliação acima de 90
-ReiLeao = Filme('O Rei leão', 2019, 'Animação, Aventura', 120, 'Brasil', 'Jon Fraveau', 'Ícaro Silva, Glauco Marques, Ivan Parente', 99, 599)
-banco.incluir(ReiLeao)
-
-# Incluindo uma lista de filmes com avaliação acima de 90
-Vingadores = Filme('Vingadores: Ultimato', 2019, 'Ação, Fantasia, Aventura', 180, 'EUA', 'Joe Russo, Anthony Russo', 'Robert Downey Jr., Chris Evans, Mark Ruffalo', 100, 2578)
-Eternos = Filme('Os Eternos', 2021, 'Ficção científica, Fantasia, Ação', 150, 'EUA', 'Chloé Zhao', 'Angelina Jolie, Richard Madden, Salma Hayek', 95, 678)
-Mortal = Filme('Mortal Kombat', 2021, 'Animação, Aventura', 110, 'EUA', 'Simon McQuoid', 'Lewis Tan, Jessica McNamee, Josh Lawson', 92, 544)
-lista_filmes = [Vingadores, Eternos, Mortal]
-banco.incluir_lista(lista_filmes)
-print('Estes são os filmes incluídos:')
-for f in lista_filmes:
-    print(f'\nID: {f.id} \nTítulo: {f.titulo} \nAno: {f.ano} \nGenero: {f.genero}')
 
 # Busca todos os filmes
 lista = banco.buscar_todos()
@@ -246,19 +235,25 @@ print('-'*60)
 for f in lista:  # exibe lista de filmes
     print(f.id, f.titulo, f.ano, f.genero, f.duracao, f.pais, f.diretor, f.elenco, f.avaliacao, f.votos, '\n')
 
+# Incluindo um filme com ano de 2019 e avaliação acima de 90
+ReiLeao = Filme('O Rei leão', 2019, 'Animação, Aventura', 120, 'Brasil', 'Jon Fraveau', 'Ícaro Silva, Glauco Marques, Ivan Parente', 99, 599)
+banco.incluir(ReiLeao)
+
+
+# Busca por ano
 lista = banco.buscar_por_ano(2019)
 print('-'*60)
 for f in lista:         # exibe lista de filmes
     print(f.id, f.titulo, f.ano, f.genero, f.duracao, f.pais, f.diretor, f.elenco, f.avaliacao, f.votos)
 
 # Busca por genero
-lista = banco.buscar_por_genero('Romance')
+lista = banco.buscar_por_genero('Crime')
 print('-'*60)
 for f in lista:         # exibe lista de filmes
     print(f.id, f.titulo, f.ano, f.genero)
 
-# Busca por ator
-lista = banco.buscar_por_elenco('Will')
+# Busca por elenco
+lista = banco.buscar_por_elenco('Nicole')
 print('-'*60)
 for f in lista:         # exibe lista de filmes
     print(f.id, f.titulo, f.ano, f.genero, f.duracao, f.pais, f.diretor, f.elenco, f.avaliacao, f.votos)
@@ -269,12 +264,5 @@ print('-'*60)
 for f in lista:         # exibe lista de filmes
     print(f.id, f.titulo, f.ano, f.genero, f.duracao, f.pais, f.diretor, f.elenco, f.avaliacao, f.votos)
 
-# Buscar por id
-f = banco.buscar_por_id(1002)
-print('-' * 60)
 
-# Excluir por id
-f = banco.excluir(1002)
-print('-' * 60)
-
-banco.exportar_filmes('saida.txt')
+banco.exportar_filmes('saida.txt')'''

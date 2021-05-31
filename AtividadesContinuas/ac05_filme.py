@@ -87,8 +87,6 @@ class BancoDeDados:
         resultado = session.query(Filme).get(filme.id)
         resultado.avaliacao = avaliacao
         session.commit()
-        print(f"O filme '{filme.titulo}' teve sua avaliação alterada para: " + str(avaliacao))
-        print('-' * 60)
 
     def excluir(self, id):
         '''
@@ -100,10 +98,8 @@ class BancoDeDados:
             print(f'ID: {resultado.id}\nTítulo: {resultado.titulo}\nEste filme está sendo excluído...')
         resultado = session.query(Filme).get(id)
         if resultado is not None:
-            print('-' * 60)
             session.delete(resultado)
             session.commit()
-            print('Filme excluído com sucesso')
 
     def buscar_todos(self):
         '''
@@ -122,7 +118,6 @@ class BancoDeDados:
         Realiza busca no banco de dados e retorna um
         objeto Filme de acordo com o seu id
         '''
-        self.id = id
         r = session.query(Filme).get(id)
         print('-' * 60)
         if r is not None:
@@ -138,7 +133,6 @@ class BancoDeDados:
         ordenado pelo ID de forma crescente
         '''
         lista = []
-        self.ano = ano
         resultado = session.query(Filme).filter(Filme.ano == ano).order_by(Filme.id)
         for r in resultado:
             lista.append(r)
@@ -151,7 +145,6 @@ class BancoDeDados:
         ordenados pelo titulo de forma crescente
         '''
         lista = []
-        self.genero = genero
         resultado = session.query(Filme).filter(Filme.genero.like('%' + genero + '%')).order_by(Filme.titulo)
         for r in resultado:
             lista.append(r)
@@ -164,7 +157,6 @@ class BancoDeDados:
         do elenco, ordenados pelo ano de lançamento em ordem crescente
         '''
         lista = []
-        self.ator = ator
         resultado = session.query(Filme).filter(Filme.elenco.like('%' + ator + '%')).order_by(Filme.ano)
         for r in resultado:
             lista.append(r)
@@ -180,7 +172,6 @@ class BancoDeDados:
             .order_by(desc(Filme.avaliacao))
         '''
         lista = []
-        self.ano = ano
         resultado = session.query(Filme).filter(Filme.ano == int(ano)).order_by(desc(Filme.avaliacao))
         for r in resultado:
             if r.avaliacao >= 90:
@@ -194,13 +185,11 @@ class BancoDeDados:
         dos filmes, contendo os dados de cada filme em uma linha, no formato:
         titulo;ano;genero;duracao;país;diretor;elenco;avaliacao;votos
         '''
-        self.nome_arquivo = nome_arquivo
         arquivo = open(nome_arquivo, 'w', encoding='UTF-8')
         resultado = session.query(Filme).order_by(Filme.titulo).all()
 
         for r in resultado:
             arquivo.write(r.titulo + ';' + str(r.ano) + ';' + r.genero + ';' + str(r.duracao) + ';' + r.pais + ';' + r.diretor + ';' + r.elenco + ';' + str(r.avaliacao) + ';' + str(r.votos) + '\n')
-        print('-'*60)
         print(f'Arquivo exportado com sucesso com o nome de {nome_arquivo}')
         print('-'*60)
         arquivo.close()

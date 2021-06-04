@@ -310,4 +310,3 @@ banco.exportar_filmes('saida.txt')
 filme = banco.buscar_por_id(7)
 if filme is not None:
     banco.alterar_avaliacao(filme, 98)
-

@@ -29,17 +29,13 @@ class CadastroConta:
     def __init__(self):
         self.contas = []
 
-    def cadastrar(self, x):
-        self.contas.append(x)
+    def cadastrar(self, conta):
+        self.contas.append(conta)
 
-    def pesquisar(self, x):
+    def pesquisar(self, numero):
         for r in self.contas:
-            r.numero == x
-        return r
-
-    def print(self):
-        for r in self.contas:
-            print(r.titular, r.numero)
+            if r.numero == numero:
+                return r
 
 
 # -------------- PROGRAMA PRINCIPAL (não deve ser alterado) -----------------
@@ -51,11 +47,9 @@ cadastro = CadastroConta()
 cadastro.cadastrar(conta1)
 cadastro.cadastrar(conta2)
 
-'''c = cadastro.print()'''
-
-'''c = cadastro.pesquisar(456)
+c = cadastro.pesquisar(456)
 print("Número:", c.numero)              # Número: 456
-print("Titular:", c.titular)            # Titular: Maria'''
+print("Titular:", c.titular)            # Titular: Maria
 
 c = cadastro.pesquisar(123)
 print("Número:", c.numero)              # Número: 123

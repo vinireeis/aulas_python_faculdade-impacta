@@ -95,7 +95,8 @@ class BancoDeDados:
         '''
         resultado = session.query(Filme).get(id)
         if resultado is not None:
-            print(f'ID: {resultado.id}\nTítulo: {resultado.titulo}\nEste filme está sendo excluído...')
+            print(
+                f'ID: {resultado.id}\nTítulo: {resultado.titulo}\nEste filme está sendo excluído...')
         resultado = session.query(Filme).get(id)
         if resultado is not None:
             session.delete(resultado)
@@ -121,7 +122,8 @@ class BancoDeDados:
         r = session.query(Filme).get(id)
         print('-' * 60)
         if r is not None:
-            print(f'ID: {r.id} \nTítulo: {r.titulo} \nAno: {r.ano} \nGenero: {r.genero} \nAvaliacao:{r.avaliacao}')
+            print(
+                f'ID: {r.id} \nTítulo: {r.titulo} \nAno: {r.ano} \nGenero: {r.genero} \nAvaliacao:{r.avaliacao}')
         else:
             print('Não existe filme com este ID')
         return r
@@ -133,7 +135,8 @@ class BancoDeDados:
         ordenado pelo ID de forma crescente
         '''
         lista = []
-        resultado = session.query(Filme).filter(Filme.ano == ano).order_by(Filme.id)
+        resultado = session.query(Filme).filter(
+            Filme.ano == ano).order_by(Filme.id)
         for r in resultado:
             lista.append(r)
         return lista
@@ -145,7 +148,8 @@ class BancoDeDados:
         ordenados pelo titulo de forma crescente
         '''
         lista = []
-        resultado = session.query(Filme).filter(Filme.genero.like('%' + genero + '%')).order_by(Filme.titulo)
+        resultado = session.query(Filme).filter(
+            Filme.genero.like('%' + genero + '%')).order_by(Filme.titulo)
         for r in resultado:
             lista.append(r)
         return lista
@@ -157,7 +161,8 @@ class BancoDeDados:
         do elenco, ordenados pelo ano de lançamento em ordem crescente
         '''
         lista = []
-        resultado = session.query(Filme).filter(Filme.elenco.like('%' + ator + '%')).order_by(Filme.ano)
+        resultado = session.query(Filme).filter(
+            Filme.elenco.like('%' + ator + '%')).order_by(Filme.ano)
         for r in resultado:
             lista.append(r)
         return lista
@@ -172,7 +177,8 @@ class BancoDeDados:
             .order_by(desc(Filme.avaliacao))
         '''
         lista = []
-        resultado = session.query(Filme).filter(Filme.ano == int(ano)).order_by(desc(Filme.avaliacao))
+        resultado = session.query(Filme).filter(
+            Filme.ano == int(ano)).order_by(desc(Filme.avaliacao))
         for r in resultado:
             if r.avaliacao >= 90:
                 lista.append(r)
@@ -189,7 +195,8 @@ class BancoDeDados:
         resultado = session.query(Filme).order_by(Filme.titulo).all()
 
         for r in resultado:
-            arquivo.write(r.titulo + ';' + str(r.ano) + ';' + r.genero + ';' + str(r.duracao) + ';' + r.pais + ';' + r.diretor + ';' + r.elenco + ';' + str(r.avaliacao) + ';' + str(r.votos) + '\n')
+            arquivo.write(r.titulo + ';' + str(r.ano) + ';' + r.genero + ';' + str(r.duracao) + ';' +
+                          r.pais + ';' + r.diretor + ';' + r.elenco + ';' + str(r.avaliacao) + ';' + str(r.votos) + '\n')
         print(f'Arquivo exportado com sucesso com o nome de {nome_arquivo}')
         print('-'*60)
         arquivo.close()
@@ -208,7 +215,8 @@ class BancoDeDados:
 
         for linha in arquivo:
             lista = linha.split(';')
-            film = Filme(lista[0], int(lista[1]), lista[2], int(lista[3]), lista[4], lista[5], lista[6], float(lista[7]), int(lista[8]))
+            film = Filme(lista[0], int(lista[1]), lista[2], int(
+                lista[3]), lista[4], lista[5], lista[6], float(lista[7]), int(lista[8]))
             lista_filmes.append(film)
 
         session.add_all(lista_filmes)
@@ -221,22 +229,29 @@ banco.criar_tabela()
 banco.importar_filmes('movies.txt')
 
 # Cria um novo Filme e insere no banco de dados
-filme1 = Filme("Parasite", 2019, "Comedy, Drama, Thriller", 132, "Korea", "Bong Joon Ho", "Song Kang-ho, Jang Hye-jin, Choi Woo-shik", 92, 40273)
+filme1 = Filme("Parasite", 2019, "Comedy, Drama, Thriller", 132, "Korea",
+               "Bong Joon Ho", "Song Kang-ho, Jang Hye-jin, Choi Woo-shik", 92, 40273)
 banco.incluir(filme1)
 
-filme2 = Filme("Joker", 2019, 'Crime, Drama, Thriller', 122, "USA", "Todd Phillips", "Joaquin Phoenix, Robert De Niro, Zazie Beetz", 91, 78481)
-filme3 = Filme("Avengers: Endgame", 2019, 'Drama, Thriller', 181, "USA", "Anthony Russo, Joe Russo", "Robert Downey Jr., Chris Evans, Mark Ruffalo", 93, 715250)
+filme2 = Filme("Joker", 2019, 'Crime, Drama, Thriller', 122, "USA",
+               "Todd Phillips", "Joaquin Phoenix, Robert De Niro, Zazie Beetz", 91, 78481)
+filme3 = Filme("Avengers: Endgame", 2019, 'Drama, Thriller', 181, "USA",
+               "Anthony Russo, Joe Russo", "Robert Downey Jr., Chris Evans, Mark Ruffalo", 93, 715250)
 lista_filmes = [filme2, filme3]
 banco.incluir_lista(lista_filmes)
 
 # Incluindo um filme com ano de 2019 e avaliação acima de 90
-ReiLeao = Filme('O Rei leão', 2019, 'Animação, Aventura', 120, 'Brasil', 'Jon Fraveau', 'Ícaro Silva, Glauco Marques, Ivan Parente', 99, 599)
+ReiLeao = Filme('O Rei leão', 2019, 'Animação, Aventura', 120, 'Brasil',
+                'Jon Fraveau', 'Ícaro Silva, Glauco Marques, Ivan Parente', 99, 599)
 banco.incluir(ReiLeao)
 
 # Incluindo uma lista de filmes com avaliação acima de 90
-Vingadores = Filme('Vingadores: Ultimato', 2019, 'Ação, Fantasia, Aventura', 180, 'EUA', 'Joe Russo, Anthony Russo', 'Robert Downey Jr., Chris Evans, Mark Ruffalo', 91, 2578)
-Eternos = Filme('Os Eternos', 2021, 'Ficção científica, Fantasia, Ação', 150, 'EUA', 'Chloé Zhao', 'Angelina Jolie, Richard Madden, Salma Hayek', 95, 678)
-Mortal = Filme('Mortal Kombat', 2021, 'Animação, Aventura', 110, 'EUA', 'Simon McQuoid', 'Lewis Tan, Jessica McNamee, Josh Lawson', 92, 544)
+Vingadores = Filme('Vingadores: Ultimato', 2019, 'Ação, Fantasia, Aventura', 180, 'EUA',
+                   'Joe Russo, Anthony Russo', 'Robert Downey Jr., Chris Evans, Mark Ruffalo', 91, 2578)
+Eternos = Filme('Os Eternos', 2021, 'Ficção científica, Fantasia, Ação', 150,
+                'EUA', 'Chloé Zhao', 'Angelina Jolie, Richard Madden, Salma Hayek', 95, 678)
+Mortal = Filme('Mortal Kombat', 2021, 'Animação, Aventura', 110, 'EUA',
+               'Simon McQuoid', 'Lewis Tan, Jessica McNamee, Josh Lawson', 92, 544)
 lista_filmes = [Vingadores, Eternos, Mortal]
 banco.incluir_lista(lista_filmes)
 
@@ -253,7 +268,8 @@ banco.excluir(6)
 lista = banco.buscar_todos()
 print('-'*60)
 for f in lista:  # exibe lista de filmes
-    print(f.id, f.titulo, f.ano, f.genero, f.duracao, f.pais, f.diretor, f.elenco, f.avaliacao, f.votos)
+    print(f.id, f.titulo, f.ano, f.genero, f.duracao,
+          f.pais, f.diretor, f.elenco, f.avaliacao, f.votos)
 
 # Busca todos os filmes do ano de 2019
 lista = banco.buscar_por_ano(2019)

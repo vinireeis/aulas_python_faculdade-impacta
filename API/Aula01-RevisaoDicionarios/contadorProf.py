@@ -15,19 +15,20 @@ Se você tiver curiosidade, no teste temos as seguintes duas linhas
 d = contador("o doce mais doce")
 self.assertEqual(d,{"o":1, "mais":1, "doce":2})
 que dizem que a variavel d tem que ser igual a {"o":1, "mais":1, "doce":2}
-
-
 '''
 
 
 def contador(texto):
-    dic = {}
-    lista = texto.split()
-    for palavra in lista:
+    dic = {}  # dicionario vazio
+    lista_de_palavras = texto.split()
+    for palavra in lista_de_palavras:
+        print(dic)
         if palavra in dic:
-            dic[palavra] += 1
-        else:
+            # dic[palavra] += 1
+            dic[palavra] = dic[palavra] + 1
+        else:  # a palavra nunca tinha aparecido antes
             dic[palavra] = 1
+    print(dic)
     return dic
 
 
@@ -44,8 +45,9 @@ class TestStringMethods(unittest.TestCase):
         d = contador("o doce mais doce")
         self.assertEqual(d, {"o": 1, "mais": 1, "doce": 2})
         d2 = contador('esse exercício é um exercício fácil ou difícil')
-        self.assertEqual(d2, {'é': 1, 'difícil': 1, 'esse': 1, 'ou': 1, 'um': 1,
-                              'fácil': 1, 'exercício': 2})
+        self.assertEqual(d2, {'é': 1, 'difícil': 1,
+                              'esse': 1, 'ou': 1, 'um': 1, 'fácil': 1,
+                              'exercício': 2})
         d3 = contador('o doce perguntou ao doce qual é o doce mais doce ' +
                       'e o doce respondeu ao doce que o doce mais doce é ' +
                       'o doce de batata doce')
@@ -57,14 +59,3 @@ class TestStringMethods(unittest.TestCase):
 def runTests():
     suite = unittest.defaultTestLoader.loadTestsFromTestCase(TestStringMethods)
     unittest.TextTestRunner(verbosity=2, failfast=True).run(suite)
-
-
-#  esses try except estao aqui para ajudar o professor. Nao te ajudam nem
-#  atrapalham em nada. Pode deletar, se quiser
-try:
-    from gabarito_contador import *
-except:
-    pass
-
-# if __name__ == "__main__":
-#     runTests()

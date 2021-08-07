@@ -4,10 +4,10 @@ import unittest
 O objetivo dessa atividade é fazer uma função contador, que recebe uma string
 e devolve uma contagem de palavras, na forma de um dicionário
 
-Por exemplo, ao fazer 
+Por exemplo, ao fazer
 d = contador("o doce mais doce")
 esperamos que d contenha o dicionário {"o":1, "mais":1, "doce":2}
-        
+
 Esse arquivo se auto testa. Ao rodar a função runTests, você verá o que já
 conseguiu fazer e o que falta.
 

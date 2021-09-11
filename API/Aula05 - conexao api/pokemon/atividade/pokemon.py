@@ -35,33 +35,42 @@ Vamos precisar destas quatro exceções personalizadas.
 Abaixo, criamos excessões com nomes personalizados.
 """
 
+
 class PokemonNaoExisteException(Exception):
-    pass #nao faça nada aqui nem nas Exceptions seguintes
-         # ela já está pronta, só é um "nome" novo
+    pass  # nao faça nada aqui nem nas Exceptions seguintes
+    # ela já está pronta, só é um "nome" novo
+
 
 class PokemonNaoCadastradoException(Exception):
     pass
 
+
 class TreinadorNaoCadastradoException(Exception):
     pass
+
 
 class PokemonJaCadastradoException(Exception):
     pass
 
+
 """
 Esta função certifica-se de que seu parâmetro é um número inteiro e lança uma ValueError se não for.
 """
+
+
 def check_int(a):
     if type(a) is not int:
         raise ValueError()
 
+
 """
 Esta função certifica-se de que seu parâmetro é uma string e que não está vazia e lança uma ValueError se não for.
 """
+
+
 def check_str(a):
     if type(a) is not str or a == "":
         raise ValueError()
-
 
 
 dic_cores = {
@@ -101,29 +110,55 @@ dic_tipos = {
 """
 1. Dado o número de um pokémon, qual é o nome dele?
 """
+
+
 def nome_do_pokemon(numero):
-    pass
+    url = f'https://pokeapi.co/api/v2/pokemon/{numero}/'
+    resp = requests.get(url)
+    dic = resp.json()
+    return dic['name']
+
 
 """
 2. Dado o nome de um pokémon, qual é o número dele?
 """
+
+
 def numero_do_pokemon(nome):
-    pass
+    url = f'https://pokeapi.co/api/v2/pokemon/{nome}/'.lower()
+    resp = requests.get(url)
+    if resp.status_code == 200:
+        dic = resp.json()
+        return dic['id']
+    else:
+        raise PokemonNaoExisteException
+
 
 """
 3. Dado o nome ou número de um pokémon, qual é o nome da cor (em inglês) predominante dele?
 """
+
+
 def color_of_pokemon(nome):
-    pass
+    url = f'https://pokeapi.co/api/v2/pokemon-species/{nome}/'.lower()
+    resp = requests.get(url)
+    if resp.status_code == 200:
+        dic = resp.json()
+        return dic['color']['name']
+    else:
+        raise PokemonNaoExisteException
+
 
 """
 4. Dado o nome ou número de um pokémon, qual é o nome da cor (em português) predominante dele?
 Os nomes de cores possíveis em português são "marrom", "amarelo", "azul", "rosa", "cinza", "roxo", "vermelho", "branco", "verde" e "preto".
 No entanto, a pokeapi ainda não foi traduzida para o português! Como você pode dar um jeito nisso?
 """
-def cor_do_pokemon(nome):
-    pass
 
+
+def cor_do_pokemon(nome):
+    cor_traducao = color_of_pokemon(nome)
+    return dic_cores[cor_traducao]
 
 
 """
@@ -132,16 +167,54 @@ Os nomes dos tipos de pokémons em português são "normal", "lutador", "voador"
 Todo pokémon pode pertencer a um ou a dois tipos diferentes. Retorne uma lista contendo os tipos, mesmo que haja somente um.
 Se houver dois tipos, a ordem não é importante.
 """
+
+
 def tipos_do_pokemon(nome):
-    pass
+    url = f'https://pokeapi.co/api/v2/pokemon/{nome}/'.lower()
+    resp = requests.get(url)
+    if resp.status_code == 200:
+        dic = resp.json()
+        tipos = []
+        for x in (dic['types']):
+            tipos.append(dic_tipos[x['type']['name']])
+        return tipos
+    else:
+        raise PokemonNaoExisteException
+
+    '''url = f'https://pokeapi.co/api/v2/pokemon/{nome}/'.lower()
+    resp = requests.get(url)
+    if resp.status_code == 200:
+        dic = resp.json()
+        types, tipos = []
+        for x, y in enumerate(dic['types']):
+            types.append(y['type']['name'])
+            tipos.append(dic_tipos[types[x]])
+        return tipos
+    else:
+        raise PokemonNaoExisteException'''
+
+
+tipos_do_pokemon('pikachu')
+
+'''types = list()
+    tipos = []
+    cont = 0
+    for x in dic['types']:
+        tipos.append(x['name'])
+        tipos_pt.append(dic_tipos[tipos[cont]])
+        cont += 1
+    return tipos_pt'''
 
 """
 6. Dado o nome de um pokémon, liste de qual pokémon ele evoluiu.
 Por exemplo, evolucao_anterior('venusaur') == 'ivysaur'
 Retorne None se o pokémon não tem evolução anterior. Por exemplo, evolucao_anterior('bulbasaur') == None
 """
+
+
 def evolucao_anterior(nome):
     pass
+
 
 """
 7. Dado o nome de um pokémon, liste para quais pokémons ele pode evoluiur.
@@ -154,8 +227,11 @@ Se o pokémon não evolui, retorne uma lista vazia. Por exemplo, evolucoes_proxi
 
 O exercicio 7 é opcional e bastante dificil. Se quiser, desligue os testes e vá para o 8!
 """
+
+
 def evolucoes_proximas(nome):
     pass
+
 
 """
 8. A medida que ganham pontos de experiência, os pokémons sobem de nível.
@@ -165,8 +241,11 @@ Assim sendo, dado um nome de pokémon e uma quantidade de pontos de experiência
 Valores negativos de experiência devem ser considerados inválidos.
 dica: na URL pokemon-species, procure growth rate
 """
+
+
 def nivel_do_pokemon(nome, experiencia):
     pass
+
 
 """
 A partir daqui, você precisará rodar o servidor treinador.py na sua máquina para poder
@@ -188,8 +267,11 @@ dica: considere as linhas
 
       nelas você vê como usar o verbo put e como verificar o status code
 """
+
+
 def cadastrar_treinador(nome):
     pass
+
 
 """
 10. Imagine que você capturou dois pokémons do mesmo tipo. 
@@ -217,8 +299,11 @@ Mais dicas teste 10:
 está fazendo um cadastro dobrado
 * Se voce receber um status 202, isso indica criação bem sucedida
 """
+
+
 def cadastrar_pokemon(nome_treinador, apelido_pokemon, tipo_pokemon, experiencia):
     pass
+
 
 """
 11. Dado um nome de treinador, um apelido de pokémon e uma quantidade de experiência, localize esse pokémon e acrescente-lhe a experiência ganha.
@@ -238,12 +323,17 @@ ou o treinador existe mas o pokemon não. Isso pode verificado acessando a respo
 
 O cod de status de sucesso é o 204
 """
+
+
 def ganhar_experiencia(nome_treinador, apelido_pokemon, experiencia):
     pass
+
 
 """
 Esta classe será utilizada no exercício 12 abaixo.
 """
+
+
 @dataclass()
 class Pokemon:
     nome_treinador: str
@@ -254,7 +344,7 @@ class Pokemon:
     cor: str
     evoluiu_de: str
 
-       
+
 """
 12. Dado um nome de treinador e um apelido de pokémon, localize esse pokémon na API do treinador e retorne um objeto da classe Pokemon, prenchida com os atributos definidos na classe
 Dicas 12:
@@ -277,8 +367,11 @@ Podemos construir um objeto do tipo pokemon assim:
 
 Pokemon(nome_treinador, apelido_pokemon, tipo, experiencia, nivel_do_pokemon(tipo, experiencia), cor_do_pokemon(tipo), evolucao_anterior(tipo))
 """
+
+
 def localizar_pokemon(nome_treinador, apelido_pokemon):
     pass
+
 
 """
 13. Dado o nome de um treinador, localize-o na API do treinador e retorne um dicionário dos seus pokemons. As chaves do dicionário serão os apelidos dos pokémons dele, e os valores serão os tipos (pikachu, bulbasaur ...) deles.
@@ -288,8 +381,11 @@ acessiveis com o verbo GET
 Consulte ela com seu navegador e veja o que tem lá! (talvez você queira usar
 as funções anteriores para criar um treinador e seus pokemons...)
 """
+
+
 def detalhar_treinador(nome_treinador):
     pass
+
 
 """
 14. Dado o nome de um treinador, localize-o na API do treinador e exclua-o, juntamente com todos os seus pokémons.
@@ -299,8 +395,11 @@ O status code vai de informar se o treinador não existia (com qual status code?
 
 Para enviar um request com o verbo delete, use requests.delete(url)
 """
+
+
 def excluir_treinador(nome_treinador):
     pass
+
 
 """
 15. Dado o nome de um treinador e o apelido de um de seus pokémons, localize o pokémon na API do treinador e exclua-o.
@@ -309,11 +408,13 @@ Usar o verbo delete na url do pokemon: {site_treinador}/treinador/{nome_treinado
 O status code vai de informar se o treinador não existe, ou se o pokemon nao existe 
 (status code 404, não deixe de verificar se foi o pokemon ou treinador que não existia)
 """
+
+
 def excluir_pokemon(nome_treinador, apelido_pokemon):
     pass
 
 
-#ignore o código a seguir, ele só existe por motivos burocráticos do professor
+# ignore o código a seguir, ele só existe por motivos burocráticos do professor
 try:
     from pokemon_gabarito import *
 except:

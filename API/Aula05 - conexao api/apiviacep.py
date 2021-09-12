@@ -12,6 +12,8 @@ cidade = dici['localidade']
 print(f'{logradouro} - {cidade}')
 retorno.status_code
 
+# Exemplo apenas
+
 
 def pega_rua(cep):
     url = f'http://viacep.com.br/ws/{cep}/json'
@@ -21,6 +23,6 @@ def pega_rua(cep):
     dici = resultado.json()  # pega o conteudo, se for um json, carrega ele
 #  para o python > criando um dicionário ou lista, dependendo da informação que
 #  continha no endereço
-    '''logradouro = dici['logradouro']
+    logradouro = dici['logradouro']
     cidade = dici['localidade']
     print(f'{logradouro} - {cidade}')

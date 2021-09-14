@@ -1,3 +1,4 @@
+from requests import api
 import requests
 from dataclasses import dataclass
 
@@ -211,8 +212,6 @@ def tipos_do_pokemon(nome):
         raise PokemonNaoExisteException'''
 
 
-tipos_do_pokemon('pikachu')
-
 '''types = list()
     tipos = []
     cont = 0
@@ -231,8 +230,23 @@ evolucao_anterior('bulbasaur') == None
 
 
 def evolucao_anterior(nome):
-    pass
+    url = f'https://pokeapi.co/api/v2/pokemon-species/{nome}/'.lower()
+    resp = requests.get(url)
+    if resp.status_code == 200:
+        dic = resp.json()
+        return dic['evolves_from_species']['name'] if dic['evolves_from_species'] is not None else None
+    else:
+        raise PokemonNaoExisteException
 
+        '''if dic['evolves_from_species'] is None:
+            return None
+        else:
+            return(dic['evolves_from_species']['name'])'''
+        '''else:
+            return None
+        evolucao = dic['evolves_from_species']['name'] if dic['evolves_from_species']['name'] != 'null' else None
+        print(evolucao if evolucao else None)
+        return dic['evolves_from_species']['name']'''
 
 """
 7. Dado o nome de um pokémon, liste para quais pokémons ele pode evoluiur.
@@ -269,11 +283,49 @@ Valores negativos de experiência devem ser considerados inválidos.
 dica: na URL pokemon-species, procure growth rate
 """
 
-
+'''
 def nivel_do_pokemon(nome, experiencia):
-    pass
+    url = f'https://pokeapi.co/api/v2/pokemon-species/{nome}/'.lower()
+    resp = requests.get(url)
+    if resp.status_code == 200:
+        dic = resp.json()
+        curva = dic['growth_rate']['name']
+        print(curva)
+        fórmula
+        print(pow(5, 2))
+        
+    else:
+        raise PokemonNaoExisteException
 
 
+nivel_do_pokemon('pikachu', 10)
+'''
+def nivel_do_pokemon(nome, experiencia):
+    if nome is None or nome == "":
+        raise PokemonNaoExisteException()
+    if experiencia < 0:
+        raise ValueError
+    resposta1 = api.get(f"{site_pokeapi}/api/v2/pokemon-species/{nome}/")
+    if resposta1.status_code == 404:
+        raise PokemonNaoExisteException()
+    resultado1 = resposta1.json()
+    resposta2 = api.get(resultado1['growth_rate']['url'])
+    resultado2 = resposta2.json()
+    for y in range(0, len(resultado2['levels'])):
+        x = resultado2['levels']
+        z = x[y]
+        w = y+1
+        if y < 99:
+            k=x[w]
+            if (experiencia >= z['experience']) and (experiencia < k['experience']):
+                nivel = z['level']
+                return nivel
+        if y == 99:
+            if experiencia >= z['experience']:
+                nivel = z['level']
+                return nivel
+
+nivel_do_pokemon('pikachu', 5000)
 """
 A partir daqui, você precisará rodar o servidor treinador.py na sua máquina
 para poder fazer a atividade. Não precisa mexer no arquivo, basta rodar ele.
@@ -369,7 +421,7 @@ Esta classe será utilizada no exercício 12 abaixo.
 """
 
 
-@dataclass()
+@ dataclass()
 class Pokemon:
     nome_treinador: str
     apelido: str

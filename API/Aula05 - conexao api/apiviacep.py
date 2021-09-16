@@ -12,9 +12,8 @@ cidade = dici['localidade']
 print(f'{logradouro} - {cidade}')
 retorno.status_code
 
+
 # Exemplo apenas
-
-
 def pega_rua(cep):
     url = f'http://viacep.com.br/ws/{cep}/json'
     resultado = requests.get(url)  # conecetei na url e baixei o que tinha

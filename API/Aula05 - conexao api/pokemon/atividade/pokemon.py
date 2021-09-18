@@ -199,7 +199,8 @@ def tipos_do_pokemon(nome):
     else:
         raise PokemonNaoExisteException
 
-    '''url = f'https://pokeapi.co/api/v2/pokemon/{nome}/'.lower()
+    '''
+    url = f'https://pokeapi.co/api/v2/pokemon/{nome}/'.lower()
     resp = requests.get(url)
     if resp.status_code == 200:
         dic = resp.json()
@@ -209,17 +210,18 @@ def tipos_do_pokemon(nome):
             tipos.append(dic_tipos[types[x]])
         return tipos
     else:
-        raise PokemonNaoExisteException'''
+        raise PokemonNaoExisteException
 
-
-'''types = list()
+    types = list()
     tipos = []
     cont = 0
     for x in dic['types']:
         tipos.append(x['name'])
         tipos_pt.append(dic_tipos[tipos[cont]])
         cont += 1
-    return tipos_pt'''
+    return tipos_pt
+    '''
+
 
 """
 6. Dado o nome de um pokémon, liste de qual pokémon ele evoluiu.
@@ -238,15 +240,16 @@ def evolucao_anterior(nome):
     else:
         raise PokemonNaoExisteException
 
-        '''if dic['evolves_from_species'] is None:
+    """"if dic['evolves_from_species'] is None:
             return None
         else:
-            return(dic['evolves_from_species']['name'])'''
-        '''else:
+            return(dic['evolves_from_species']['name'])
+        else:
             return None
         evolucao = dic['evolves_from_species']['name'] if dic['evolves_from_species']['name'] != 'null' else None
         print(evolucao if evolucao else None)
-        return dic['evolves_from_species']['name']'''
+        return dic['evolves_from_species']['name']"""
+
 
 """
 7. Dado o nome de um pokémon, liste para quais pokémons ele pode evoluiur.
@@ -283,49 +286,23 @@ Valores negativos de experiência devem ser considerados inválidos.
 dica: na URL pokemon-species, procure growth rate
 """
 
-'''
+
 def nivel_do_pokemon(nome, experiencia):
     url = f'https://pokeapi.co/api/v2/pokemon-species/{nome}/'.lower()
     resp = requests.get(url)
     if resp.status_code == 200:
         dic = resp.json()
-        curva = dic['growth_rate']['name']
-        print(curva)
-        fórmula
-        print(pow(5, 2))
-        
+        curva_url = dic['growth_rate']['url']
+        resp_curva = requests.get(curva_url)
+        dic_curva = resp_curva.json()
+        for x in range(100):
+            if experiencia >= int(dic_curva['levels'][x]['experience']):
+                level = dic_curva['levels'][x]['level']
+        return level
     else:
         raise PokemonNaoExisteException
 
 
-nivel_do_pokemon('pikachu', 10)
-'''
-def nivel_do_pokemon(nome, experiencia):
-    if nome is None or nome == "":
-        raise PokemonNaoExisteException()
-    if experiencia < 0:
-        raise ValueError
-    resposta1 = api.get(f"{site_pokeapi}/api/v2/pokemon-species/{nome}/")
-    if resposta1.status_code == 404:
-        raise PokemonNaoExisteException()
-    resultado1 = resposta1.json()
-    resposta2 = api.get(resultado1['growth_rate']['url'])
-    resultado2 = resposta2.json()
-    for y in range(0, len(resultado2['levels'])):
-        x = resultado2['levels']
-        z = x[y]
-        w = y+1
-        if y < 99:
-            k=x[w]
-            if (experiencia >= z['experience']) and (experiencia < k['experience']):
-                nivel = z['level']
-                return nivel
-        if y == 99:
-            if experiencia >= z['experience']:
-                nivel = z['level']
-                return nivel
-
-nivel_do_pokemon('pikachu', 5000)
 """
 A partir daqui, você precisará rodar o servidor treinador.py na sua máquina
 para poder fazer a atividade. Não precisa mexer no arquivo, basta rodar ele.
@@ -350,8 +327,12 @@ dica: considere as linhas
 
 
 def cadastrar_treinador(nome):
-    pass
-
+    url = f"http://127.0.0.1:9000/treinador/{nome}"
+    r = requests.put(url)
+    if r.status_code == 303:
+        return False
+    else:
+        return True
 
 """
 10. Imagine que você capturou dois pokémons do mesmo tipo.
@@ -386,7 +367,12 @@ está fazendo um cadastro dobrado
 
 def cadastrar_pokemon(nome_treinador, apelido_pokemon, tipo_pokemon,
                       experiencia):
-    pass
+    url = f"http://127.0.0.1:9000/treinador/{nome}"
+    r = requests.put(url)
+    if r.status_code == 303:
+        return False
+    else:
+        return True
 
 
 """

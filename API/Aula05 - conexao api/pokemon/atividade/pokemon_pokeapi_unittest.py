@@ -144,7 +144,7 @@ class TestPokeapi(unittest.TestCase):
 
 
     @sem_io
-    def test_07a_ok_evolucoes_simples(self):
+    def ntest_07a_ok_evolucoes_simples(self):
         self.assert_equals_unordered_list(
             ["charmeleon"], evolucoes_proximas("charmander"))
         self.assert_equals_unordered_list(
@@ -153,7 +153,7 @@ class TestPokeapi(unittest.TestCase):
             ["charizard"], evolucoes_proximas("ChArMeLeON"))
 
     @sem_io
-    def test_07b_ok_nao_tem_simples(self):
+    def ntest_07b_ok_nao_tem_simples(self):
         self.assert_equals_unordered_list([], evolucoes_proximas("lugia"))
         self.assert_equals_unordered_list([], evolucoes_proximas("turtonator"))
         self.assert_equals_unordered_list([], evolucoes_proximas("CHARIZARD"))
@@ -161,7 +161,7 @@ class TestPokeapi(unittest.TestCase):
         self.assert_equals_unordered_list([], evolucoes_proximas("ALAkazam"))
 
     @sem_io
-    def test_07c_ok_evolucoes_complexas(self):
+    def ntest_07c_ok_evolucoes_complexas(self):
         self.assert_equals_unordered_list(
             ["ninjask", "shedinja"], evolucoes_proximas("nincada"))
         self.assert_equals_unordered_list(["vaporeon", "jolteon", "flareon", "espeon",
@@ -178,13 +178,13 @@ class TestPokeapi(unittest.TestCase):
             ["vileplume", "bellossom"], evolucoes_proximas("GLOOM"))
 
     @sem_io
-    def test_07d_ok_nao_tem_complexas(self):
+    def ntest_07d_ok_nao_tem_complexas(self):
         self.assert_equals_unordered_list([], evolucoes_proximas("espeon"))
         self.assert_equals_unordered_list([], evolucoes_proximas("Leafeon"))
         self.assert_equals_unordered_list([], evolucoes_proximas("POLITOED"))
 
     @sem_io
-    def test_07e_nao_existe(self):
+    def ntest_07e_nao_existe(self):
         pokemon_nao_existe(lambda: evolucoes_proximas("DOBBY"), self)
         pokemon_nao_existe(lambda: evolucoes_proximas("Peppa-Pig"), self)
         pokemon_nao_existe(lambda: evolucoes_proximas("batman"), self)

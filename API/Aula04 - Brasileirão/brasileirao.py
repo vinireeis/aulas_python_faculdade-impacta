@@ -176,13 +176,21 @@ classificados
 
 
 def nomes_classificados_libertadores(dados):
-    ids = classificados_libertadores(dados)
-    # nomes = []
-    # for x in nomes:
+    lista_nomes = []
+    for time in classificados_libertadores(dados):
+        lista_nomes.append(nome_do_time(dados, time))
+    return lista_nomes
+
+    #    nome = nome_do_time(dados, int(x))
+    #    nomes.append(nome)
+    # print(nomes)
+    # return nomes
     # nomes.append(nome_do_time(dados, x))
     # return nomes
 
 
+dados = pega_dados()
+nomes_classificados_libertadores(dados)
 '''
 Nos nossos dados, cada time tem um id, uma identificacao numerica.
 (voce pode consultar as identificacoes numericas em dados['equipes'])

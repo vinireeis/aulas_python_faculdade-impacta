@@ -11,9 +11,7 @@ dentro de listas)
 Os dados estão fornecidos em um arquivo (ano2018.json) que você
 pode abrir no firefox, para tentar entender melhor (use o menu
 do canto direito superior, e "abrir arquivo")
-'''
 
-'''
 DICA VSCODE: para poder executar o arquivo py a partir do VSCODE,
 é importante ter aberto a pasta certa
 
@@ -24,9 +22,7 @@ distribuidos > brasileirao > brasileirao.py
 Deve selecionar no VSCODE File > Open folder
 e escolher a pasta brasileirao.
 Se escolher distribuidos, o python nao vai achar o arquivo ano2018.json
-'''
 
-'''
 Se quiser ver os dados dentro do python,
 pode chamar a funcao
 pega_dados
@@ -64,7 +60,7 @@ pprint(dados2018['equipes']['6'])
 #  print('faixas de classificacao e rebaixamento')
 #  pprint(dados2018['fases']['2700']['faixas-classificacao'])
 
-print('classificacao dos times no fim do campeonato')
+#  print('classificacao dos times no fim do campeonato')
 #  print(dados2018['fases']['2700']['classificacao']['grupo']['Único'])
 #  print(dados2018['fases']['2700']['classificacao'])
 
@@ -89,7 +85,6 @@ def nome_do_time(dados, id_numerica):
 
 '''
 A proxima funcao recebe somente o dicionario dos dados do brasileirao
-
 Ela retorna a id do time que foi campeao.
 '''
 
@@ -100,7 +95,6 @@ def id_campeao(dados):
 
 '''
 A proxima funcao recebe somente o dicionario dos dados do brasileirao
-
 Ela retorna o nome-comum do time que foi campeao.
 '''
 
@@ -127,7 +121,6 @@ as strings "1" e "5" em números inteiros
 ['1', '5']
 >>> string.split('-')[1]
 '5'
-
 '''
 
 
@@ -181,16 +174,7 @@ def nomes_classificados_libertadores(dados):
         lista_nomes.append(nome_do_time(dados, time))
     return lista_nomes
 
-    #    nome = nome_do_time(dados, int(x))
-    #    nomes.append(nome)
-    # print(nomes)
-    # return nomes
-    # nomes.append(nome_do_time(dados, x))
-    # return nomes
 
-
-dados = pega_dados()
-nomes_classificados_libertadores(dados)
 '''
 Nos nossos dados, cada time tem um id, uma identificacao numerica.
 (voce pode consultar as identificacoes numericas em dados['equipes'])
@@ -215,8 +199,8 @@ def ids_dos_times_de_um_jogo(dados,id_jogo):
 
 
 def ids_dos_times_de_um_jogo(dados, id_jogo):
-    time1 = 12
-    time2 = 13
+    time1 = dados['fases']['2700']['jogos']['id'][id_jogo]['time1']
+    time2 = dados['fases']['2700']['jogos']['id'][id_jogo]['time2']
     return time1, time2
     # assim a gente retorna as duas respostas em um unico return
 
@@ -233,7 +217,11 @@ nesse arquivo estao representados nao como números, mas como strings)
 
 
 def nomes_dos_times_de_um_jogo(dados, id_jogo):
-    pass
+    ids = ids_dos_times_de_um_jogo(dados, id_jogo)
+    lista = []
+    for x in ids:
+        lista.append(nome_do_time(dados, x))
+    return lista
 
 
 '''
@@ -245,7 +233,9 @@ Se o nome comum nao existir, retorne 'nao encontrado'
 
 
 def id_do_time(dados, nome_time):
-    pass
+    for id in dados['equipes']:
+        if dados['equipes'][id]['nome-comum'] == nome_time:
+            return id
 
 
 '''

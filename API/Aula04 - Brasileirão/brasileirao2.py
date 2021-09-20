@@ -179,16 +179,3 @@ def nomes_classificados_libertadores(dados):
     lista_nomes = []
     for time in classificados_libertadores(dados):
         lista_nomes.append(nome_do_time(dados, time))
-    return lista_nomes
- 
-
-    #    nome = nome_do_time(dados, int(x))
-    #    nomes.append(nome)
-    # print(nomes)
-    # return nomes
-    # nomes.append(nome_do_time(dados, x))
-    # return nomes
-
-
-dados = pega_dados()
-nomes_classificados_libertadores(dados)

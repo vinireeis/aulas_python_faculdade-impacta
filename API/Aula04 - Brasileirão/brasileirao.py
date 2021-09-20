@@ -236,6 +236,7 @@ def id_do_time(dados, nome_time):
     for id in dados['equipes']:
         if dados['equipes'][id]['nome-comum'] == nome_time:
             return id
+    return 'nao encontrado'
 
 
 '''
@@ -250,7 +251,10 @@ dica: busque em dados['fases']
 
 
 def datas_de_jogo(dados):
-    pass
+    datas = []
+    for x in dados['fases']['2700']['jogos']['data']:
+        datas.append(x)
+    return datas
 
 
 '''
@@ -265,7 +269,10 @@ vai falhar
 
 
 def data_de_um_jogo(dados, id_jogo):
-    pass
+    for x in dados['fases']['2700']['jogos']['id']:
+        if x == id_jogo:
+            return dados['fases']['2700']['jogos']['id'][x]['data']
+    return 'nao encontrado'
 
 
 '''

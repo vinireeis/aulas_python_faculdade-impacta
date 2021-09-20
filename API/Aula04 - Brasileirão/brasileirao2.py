@@ -179,3 +179,16 @@ def nomes_classificados_libertadores(dados):
     lista_nomes = []
     for time in classificados_libertadores(dados):
         lista_nomes.append(nome_do_time(dados, time))
+
+
+def data_de_um_jogo(dados, id_jogo):
+    for x in dados['fases']['2700']['jogos']['id']:
+        if x == id_jogo:
+            print(dados['fases']['2700']['jogos']['id'][x]['data'])
+        else:
+            print('nao encontrado')
+
+
+f = pega_dados()
+
+data_de_um_jogo(f, '102132')

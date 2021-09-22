@@ -1,6 +1,6 @@
 from pokemonmeu import PokemonNaoExisteException
 import requests
-
+"""
 
 def nivel_do_pokemon(nome, experiencia):
     url = f'https://pokeapi.co/api/v2/pokemon-species/{nome}/'.lower()
@@ -25,7 +25,7 @@ def nivel_do_pokemon(nome, experiencia):
 nivel_do_pokemon(25, 5000)
 
 
-"""
+
 7. Dado o nome de um pokémon, liste para quais pokémons ele pode evoluiur.
 Por exemplo, evolucoes_proximas('ivysaur') == ['venusaur'].
 A maioria dos pokémons que podem evoluir, só podem evoluir para um único tipo
@@ -45,33 +45,44 @@ vá para o 8!
 
 
 def evolucoes_proximas(nome):
+    finals_evolves = []
     evolucoes = []
     url = f'https://pokeapi.co/api/v2/pokemon-species/{nome}/'.lower()
     resp = requests.get(url)
     if resp.status_code == 200:
         dic = resp.json()
         url_evolution = dic['evolution_chain']['url']
-        evolution_before = (dic['evolves_from_species']['name'] if dic['evolves_from_species'] is not None else None)
+        evolution_before = dic['evolves_from_species']['name'] if dic['evolves_from_species'] is not None else None
+        print(f'EVOLUCAO ANTERIOR: {evolution_before}')
         resp = requests.get(url_evolution)
         if resp.status_code == 200:
             dic = resp.json()
-            if dic['chain']['evolves_to'][0]['species']['name'] is not None and dic['chain']['evolves_to'][0]['species']['name'] != evolution_before and evolution_before is None:
-                for x in dic['chain']['evolves_to']:
-                    evolucoes.append(x['species']['name'])
-                    # evolucoes.append(dic[x]['species']['name'])
-            elif dic['chain']['evolves_to'][0]['evolves_to'][0]['species']['name'] is not None and dic['chain']['evolves_to'][0]['evolves_to'][0]['species']['name'] != nome:
+            print(finals_evolves)
+            if evolution_before is None and dic['chain']['evolves_to'] == []:
+                print('Estou retornando lista vazia')
+                return []
+            for x in dic['chain']['evolves_to'][0]['evolves_to']:
+                finals_evolves.append(
+                    x['species']['name'] if x is not None else None)
+            if evolution_before is not None and nome.lower() not in finals_evolves:
                 for x in dic['chain']['evolves_to'][0]['evolves_to']:
                     evolucoes.append(x['species']['name'])
-            else:
-                evolucoes = []
+                    print(evolucoes)
                 return evolucoes
+            elif evolution_before is None:
+                for x in dic['chain']['evolves_to']:
+                    evolucoes.append(x['species']['name'])
+                print(evolucoes)
+                return evolucoes
+            else:
+                return []
         else:
             raise PokemonNaoExisteException
     else:
-        raise PokemonNaoExisteException  
+        raise PokemonNaoExisteException
 
 
-print(evolucoes_proximas("charmander"))
+print(evolucoes_proximas("CHARIZARD"))
 
 
 '''
@@ -83,4 +94,18 @@ for x in dic['chain']['evolves_to']:
 elif dic['chain']['evolves_to']['0']['evolves_to']['0']['species']['name']:
     for x in dic['chain']['evolves_to']['0']['evolves_to']:
         evolucoes.append(dic[x]['species']['name'])
-print(evolucoes)'''
+print(evolucoes)
+
+
+-----------------------------===---------------------------
+if dic['chain']['evolves_to'][0]['species']['name'] is not None and dic['chain']['evolves_to'][0]['species']['name'] != evolution_before and evolution_before is None:
+                for x in dic['chain']['evolves_to']:
+                    evolucoes.append(x['species']['name'])
+                    # evolucoes.append(dic[x]['species']['name'])
+            elif dic['chain']['evolves_to'][0]['evolves_to'][0]['species']['name'] is not None and dic['chain']['evolves_to'][0]['evolves_to'][0]['species']['name'] != nome:
+                for x in dic['chain']['evolves_to'][0]['evolves_to']:
+                    evolucoes.append(x['species']['name'])
+            else:
+                evolucoes = []
+                return evolucoes
+'''

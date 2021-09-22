@@ -142,7 +142,6 @@ class TestPokeapi(unittest.TestCase):
         pokemon_nao_existe(lambda: evolucao_anterior("batman"), self)
         pokemon_nao_existe(lambda: evolucao_anterior("SpiderMan"), self)
 
-
     @sem_io
     def test_07a_ok_evolucoes_simples(self):
         self.assert_equals_unordered_list(
@@ -189,7 +188,6 @@ class TestPokeapi(unittest.TestCase):
         pokemon_nao_existe(lambda: evolucoes_proximas("Peppa-Pig"), self)
         pokemon_nao_existe(lambda: evolucoes_proximas("batman"), self)
         pokemon_nao_existe(lambda: evolucoes_proximas("SpiderMan"), self)
-
 
     @sem_io
     def test_08a_simples(self):

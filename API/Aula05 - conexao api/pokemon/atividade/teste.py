@@ -86,8 +86,6 @@ print(evolucoes_proximas("CHARIZARD"))
 
 
 '''
-:
-
 for x in dic['chain']['evolves_to']:
         evolucoes.append(dic[x]['species']['name'])
         #  evolucoes.append(dic[x]['species']['name'] if dic[x]['species']['name'] is not None else None)

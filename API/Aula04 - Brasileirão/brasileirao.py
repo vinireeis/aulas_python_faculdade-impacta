@@ -287,7 +287,7 @@ o número de vezes que um jogo ocorreu no estádio
 
 
 def dicionario_id_estadio_e_nro_jogos(dados):
-    pass
+    total_jogos_por_estadio = {}
 
 
 '''

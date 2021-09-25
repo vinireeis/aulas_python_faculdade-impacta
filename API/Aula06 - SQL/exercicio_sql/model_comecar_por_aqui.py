@@ -37,7 +37,7 @@ tanto nele quanto nos outros arquivos, e será com ele que voce rodará os teste
 já temos um arquivo herois, que foi importado
 abaixo
 '''
-from herois import HeroiNaoExisteException
+from herois import HeroiNaoExisteException, consultar_heroi, consultar_heroi_por_nome
 import herois
 
 '''
@@ -107,7 +107,12 @@ nova função de acesso ao banco, chamada consultar_heroi_por_nome,
 no arquivo herois
 '''
 def heroi_pronto_por_nome(nomeHeroi):
-    pass
+    heroi = consultar_heroi_por_nome(nomeHeroi)
+    heroi['vida'] = heroi['fisico'] * 10
+    print(heroi)
+    return heroi
+    
+
 '''
 Ex5 (ainda no model.py)
 Melhore sua funcao heroi_pronto_por_nome. Agora, o dicionario também
@@ -138,7 +143,8 @@ Repare que a funcao recebe dicionários, e nem fala com o SQL
 
 
 def atacar_com_fisico(atacante, defensor):
-   pass 
+    defensor.update({'vida': defensor['vida'] - atacante['fisico']})
+    pass 
 
 '''
 Opcional - não testado
@@ -164,6 +170,8 @@ Repare que a vida nunca pode ficar negativa. O mínimo é 0.
 (fazer a funcao abaixo) - ela recebe dicionarios e nem fala com o sql
 '''
 def atacar_com_magia(atacante, defensor):
+    newlife = defensor['vida'] - atacante['magia'] if defensor['vida'] > atacante['magia'] else 0
+    defensor.update({'vida': newlife})
     pass
 
 '''

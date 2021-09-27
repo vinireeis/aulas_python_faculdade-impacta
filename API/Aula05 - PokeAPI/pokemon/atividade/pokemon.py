@@ -271,7 +271,36 @@ vá para o 8!
 
 
 def evolucoes_proximas(nome):
-    pass
+    finals_evolves = []
+    evolucoes = []
+    url = f'https://pokeapi.co/api/v2/pokemon-species/{nome}/'.lower()
+    resp = requests.get(url)
+    if resp.status_code == 200:
+        dic = resp.json()
+        url_evolution = dic['evolution_chain']['url']
+        evolution_before = dic['evolves_from_species']['name'] if dic['evolves_from_species'] is not None else None
+        resp = requests.get(url_evolution)
+        if resp.status_code == 200:
+            dic = resp.json()
+            if not evolution_before and dic['chain']['evolves_to'] == []:
+                return []
+            for x in dic['chain']['evolves_to'][0]['evolves_to']:
+                finals_evolves.append(
+                    x['species']['name'] if x is not None else None)
+            if evolution_before is not None and nome.lower() not in finals_evolves:
+                for x in dic['chain']['evolves_to'][0]['evolves_to']:
+                    evolucoes.append(x['species']['name'])
+                return evolucoes
+            elif evolution_before is None:
+                for x in dic['chain']['evolves_to']:
+                    evolucoes.append(x['species']['name'])
+                return evolucoes
+            else:
+                return []
+        else:
+            raise PokemonNaoExisteException
+    else:
+        raise PokemonNaoExisteException
 
 
 """

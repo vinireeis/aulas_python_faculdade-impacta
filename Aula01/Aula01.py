@@ -10,4 +10,5 @@ natural = "São Paulo"
 
 print("------------------------------------------------")
 print("------------------------------------------------")
-print("Meu nome é", nome, "minha idade é", idade, "anos e eu sou natural de", natural)
+print("Meu nome é", nome, "minha idade é",
+      idade, "anos e eu sou natural de", natural)

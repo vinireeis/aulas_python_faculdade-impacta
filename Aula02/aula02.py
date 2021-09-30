@@ -57,7 +57,8 @@ EXERCÍCIO 4:
       7% de aumento.
     - Caso contrário, o funcionário receberá 15% de aumento.
 '''
-# exercicio 4 calcular_salario salario + reajuste, se salario >2.000  + 7% se menor + 15% #
+# exercicio 4 calcular_salario salario + reajuste, se salario >2.000  + 7% se
+#  menor + 15%
 
 
 def calcular_salario(salario):
@@ -81,8 +82,9 @@ def calcular_salario1(salario):
 
 '''
 Exercicio 5
-    implemente a função "soma_divisores" que recebe como parametro de entrada um numero
-    positivo e reotrna a soma de todos os divisores desse númer.
+    implemente a função "soma_divisores" que recebe como parametro de entrada
+    um numero
+    positivo e retorna a soma de todos os divisores desse número.
     Exemplo:
     - caso o número seja 15, o retorno deve ser 24 (1+3+5+15)
     - caso o número seja 30, o retorno deve ser 72 (1+2+3+5+6+10+15+30)
@@ -101,8 +103,9 @@ def soma_divisores(n):
 
 def soma_divisores1(n):  # for
     soma = 0  # variavel para somar os divisores#
-    for a in range(1, n + 1):  # nao precisa de variavel contador a = 1 // precisa colocar n +1 pois range para 1 numero antes de N#
-        if n % a == 0:  # se o meu N for divisivel sem resto#
+    for a in range(1, n + 1):  # nao precisa de variavel contador a = 1 //
+        # precisa colocar n +1 pois range para 1 numero antes de N
+        if n % a == 0:  # se o meu N for divisivel sem resto
             soma += a  # soma = soma + a
         a += 1
     return soma
@@ -110,8 +113,10 @@ def soma_divisores1(n):  # for
 
 '''
 exerc 6
-implemente a função fatorial que recebe um númer positivo e retorna o fatorial desse numero.
-o fatorial desse número N é o produto dos números naturais consecutivos de 1 até N.
+implemente a função fatorial que recebe um número positivo e retorna o fatorial
+desse numero.
+o fatorial desse número N é o produto dos números naturais consecutivos de 1
+até N.
 por exemplo:
 - o fatorial de 5 é 120 (1*2*3*4*5)
 - o fatorial de 10 é 3628800 (1*2*3*4*5*6*7*8*9*10)

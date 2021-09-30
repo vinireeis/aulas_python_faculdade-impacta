@@ -47,6 +47,6 @@ for i in result:
     print(f'{i.nome}, {i.idade}, {i.salario:.2f}')
 print('-' * 50)
 print('-' * 50)
-result = session.query(Funcionario).filter(Funcionario.salario >1500)
+result = session.query(Funcionario).filter(Funcionario.salario > 1500)
 for i in result:
     print(f'{i.nome}, {i.idade}, {i.salario:.2f}')

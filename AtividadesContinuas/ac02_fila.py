@@ -107,11 +107,17 @@ DICA: Utilize as funçoes enfileirar e desenfileirar implementadas anteriormente
 '''
 
 
-def vira_n(fila, n):
+def vira_n1(fila, n):
     for i in range(1, n+1):
-        novafila = fila.pop(0, i)
-        fila.append(novafila)
-    return len(fila)
+        x = desenfileirar(fila)
+        enfileirar(fila, x)
+    return fila
+
+
+def vira_n(fila, n):
+    for x in range(1, n+1):
+        enfileirar(fila, desenfileirar(fila))
+    return fila
 
 
 '''
@@ -131,7 +137,9 @@ inserir no final da fila.
 
 
 def vira_4_mata_1(fila):
-    pass
+    vira_n(fila, 4)
+    fila.pop(0)
+    return fila
 
 
 '''
@@ -153,4 +161,4 @@ DICA: Utilize uma "pilha" como estrutura auxiliar:
 
 
 def inverte(fila):
-    pass
+    return fila.reverse()

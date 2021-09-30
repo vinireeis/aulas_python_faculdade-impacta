@@ -39,8 +39,8 @@ o elemento no topo da pilha.
 
 
 def empilhar(pilha, elemento):
-    pilha.push(elemento)
-    return pilha        # tire esse pass e escreva o codigo aqui
+    pilha.append(elemento)
+    return pilha
 
 
 '''
@@ -61,8 +61,7 @@ o elemento do topo, mas sem retirá-lo da pilha.
 
 
 def topo(pilha):
-    topo = pilha [-1]
-    return topo
+    return pilha[-1]
 
 
 '''
@@ -96,7 +95,10 @@ A função deve retornar a pilha.
 
 
 def pilha_letras(texto):
-    pass
+    pilha = []
+    for x in texto:
+        pilha.append(x)
+    return pilha
 
 
 '''
@@ -128,7 +130,13 @@ A pilha final deve ser: [x, y]
 
 
 def menos_o_d(texto):
-    pass
+    pilha = []
+    for letra in texto:
+        if letra == 'd' and pilha:
+            desempilhar(pilha)
+        elif letra != 'd':
+            pilha.append(letra)
+    return pilha
 
 
 '''
@@ -163,7 +171,9 @@ pilha_impar = [1, 3, 5]
 def pilha_par_impar(pilha):
     pilha_par = []
     pilha_impar = []
-
-    pass                # implemente o restante aqui
-
+    for num in pilha:
+        if num % 2 == 0:
+            pilha_par.append(num)
+        else:
+            pilha_impar.append(num)
     return pilha_par, pilha_impar

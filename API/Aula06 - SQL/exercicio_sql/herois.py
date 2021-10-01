@@ -28,10 +28,8 @@ def heroi_existe(id_heroi):
 def consultar_heroi(id_heroi):
     with engine.connect() as conexao:
         statement = text ("SELECT * FROM Heroi WHERE id = :heroi") 
-        # :jogador -> buraco que vai ser preenchido quando eu chamar con.execute
-        # :jogador -> O ":" marca o buraco. Sem ":" nao tem buraco, e coisas estranhas vao acontecer
-        retorno = conexao.execute(statement, heroi=id_heroi) #e usei esse buraco
-        herois = retorno.fetchall()                   #pega a primeira linha do resultado
+        retorno = conexao.execute(statement, heroi=id_heroi)
+        herois = retorno.fetchall()
         if herois == []:
             raise HeroiNaoExisteException
         else:
@@ -41,10 +39,8 @@ def consultar_heroi(id_heroi):
 def consultar_heroi_por_nome(nome_heroi):
     with engine.connect() as conexao:
         consulta_db = text ("SELECT * FROM Heroi WHERE nome = :heroi") 
-        # :jogador -> buraco que vai ser preenchido quando eu chamar con.execute
-        # :jogador -> O ":" marca o buraco. Sem ":" nao tem buraco, e coisas estranhas vao acontecer
-        retorno = conexao.execute(consulta_db, heroi=nome_heroi) #e usei esse buraco
-        nomes_heroi = retorno.fetchall()                   #pega a primeira linha do resultado
+        retorno = conexao.execute(consulta_db, heroi=nome_heroi)
+        nomes_heroi = retorno.fetchall()
         if nomes_heroi == []:
             raise HeroiNaoExisteException
         else:

@@ -29,3 +29,14 @@ def heroi_quantos_itens(id_heroi):
             else:
                 break
         return cont
+
+def itens_do_heroi(id_heroi):
+    with engine.connect() as conexao:
+        query = text("SELECT * FROM Item as TB1 LEFT JOIN ItemDoHeroi AS TB2 ON TB1.id = TB2.idItem WHERE idHeroi = :idHeroi")
+        executa_query = conexao.execute(query, idHeroi = id_heroi)
+        items_herois = executa_query.fetchall()
+        return items_herois
+
+
+if __name__ == '__main__':
+    print(itens_do_heroi(1))

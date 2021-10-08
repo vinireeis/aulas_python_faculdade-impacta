@@ -37,6 +37,29 @@ def itens_do_heroi(id_heroi):
         items_herois = executa_query.fetchall()
         return items_herois
 
+def itens_em_uso_por_nome_do_heroi(nome_heroi):
+    with engine.connect() as conexao:
+        lista = []
+        query = text("SELECT * FROM Item JOIN ItemDoHeroi ON Item.id = ItemDoHeroi.idItem JOIN Heroi ON Heroi.id = ItemDoHeroi.idheroi WHERE Heroi.nome = :nome")
+        exec_query = conexao.execute(query, nome = nome_heroi)
+        itens_uso = exec_query.fetchall()
+        for x in itens_uso:
+            if x['emUso'] == 1:
+                print(x)
+                lista.append(dict(x))
+        if len(lista) < 2: 
+            print(lista)
+            return lista
+            
+        else:
+            lista = []
+
+
+
+
 
 if __name__ == '__main__':
-    print(itens_do_heroi(1))
+    itens = itens_em_uso_por_nome_do_heroi('harry')
+    print(itens[0]['magia'])
+    
+        

@@ -114,7 +114,6 @@ no arquivo herois
 def heroi_pronto_por_nome(nomeHeroi):
     heroi = consultar_heroi_por_nome(nomeHeroi)
     heroi['vida'] = heroi['fisico'] * 10
-    print(heroi)
     return heroi
 
 
@@ -251,7 +250,12 @@ fazer acessos a mais
 
 
 def lista_itens_em_uso_do_heroi(idHeroi):
-    pass
+    query = itens_do_heroi.itens_do_heroi(idHeroi)
+    lista = []
+    for x in query:
+        if x['emUso'] == 1:
+            lista.append(dict(x))     
+    return lista
 
 
 '''
@@ -260,8 +264,7 @@ Funcao itens em uso por nome do heroi
 
 Crie essa função no arquivo itens_do_heroi
 
-Ela recebe uma string (o nome do heroi) e devolve uma lista (com os itens em
-uso do heroi)
+Ela recebe uma string (o nome do heroi) e devolve uma lista (com os itens em uso do heroi)
 
 Cada item é um dicionário descrevendo o item
 

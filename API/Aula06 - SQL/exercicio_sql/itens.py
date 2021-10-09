@@ -3,6 +3,7 @@ from sqlalchemy import text
 
 engine = create_engine('sqlite:///rpg.db')
 
+
 class ItemNaoExisteException(Exception):
     pass
 

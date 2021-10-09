@@ -44,12 +44,17 @@ def post_alunos():
 
 @app.route("/alunos/<int:id_aluno>", methods=['GET'])
 def get_aluno_por_id(id_aluno):
-
     if (id_aluno >= 1000 * 1000):
-        return ('id inválida', 400)
-    return "<id>aluno"
-    pass
+        return ('use apenas nros menores que 1 milhão', 400)
+    for aluno in todas_pessoas["alunos"]:
+        if aluno['id'] == id_aluno:
+            return aluno
 
+
+@app.route("/reseta", methods=['POST'])
+def reseta():
+    todas_pessoas["alunos"].clear()
+    return 'bla'
 
 
 if __name__ == '__main__':

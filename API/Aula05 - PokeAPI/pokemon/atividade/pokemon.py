@@ -1,5 +1,5 @@
-from requests import api
 import requests
+from requests import api
 from dataclasses import dataclass
 
 """
@@ -362,6 +362,7 @@ def cadastrar_treinador(nome):
         return False
     else:
         return True
+
 
 """
 10. Imagine que você capturou dois pokémons do mesmo tipo.

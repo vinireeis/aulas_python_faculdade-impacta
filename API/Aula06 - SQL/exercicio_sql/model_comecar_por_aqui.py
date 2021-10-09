@@ -1,12 +1,7 @@
-import shutil
-import hashlib
-import unittest
-import random
+import unittest, random, shutil, hashlib, herois, itens
 import itens_do_heroi
 from herois import HeroiNaoExisteException, consultar_heroi, consultar_heroi_por_nome
-import herois
 from itens import ItemNaoExisteException
-import itens
 
 '''
 1) Examine o banco de dados no site https://sqliteonline.com/.
@@ -111,9 +106,17 @@ no arquivo herois
 '''
 
 
+#  def heroi_pronto_por_nome(nomeHeroi):
+#     heroi = consultar_heroi_por_nome(nomeHeroi)
+#     heroi['vida'] = heroi['fisico'] * 10
+#     return heroi
 def heroi_pronto_por_nome(nomeHeroi):
+    item = itens_do_heroi.itens_em_uso_por_nome_do_heroi(nomeHeroi)
     heroi = consultar_heroi_por_nome(nomeHeroi)
     heroi['vida'] = heroi['fisico'] * 10
+    if item != []:
+        heroi['magia'] += item[0]['magia']
+        heroi['agilidade'] += item[0]['agilidade']
     return heroi
 
 
@@ -254,7 +257,7 @@ def lista_itens_em_uso_do_heroi(idHeroi):
     lista = []
     for x in query:
         if x['emUso'] == 1:
-            lista.append(dict(x))     
+            lista.append(dict(x))
     return lista
 
 
@@ -294,6 +297,7 @@ em uso para fazer efeito
 que já existe)
 Se for o caso, altere a vida do heroi adequadamente! (ex13b)
 '''
+
 '''
 Ex14
 Façamos um upgrade nas nossas funções de ataque: se o atacante

@@ -18,10 +18,11 @@ def heroi_existe(id_heroi):
     with engine.connect() as con:
         statement = text("SELECT * FROM Heroi WHERE id = :heroi")
 # :jogador -> buraco que vai ser preenchido quando eu chamar con.execute
-# :jogador -> O ":" marca o buraco. Sem ":" nao tem buraco, e coisas estranhas vao acontecer
+# :jogador -> O ":" marca o buraco. Sem ":" nao tem buraco, e coisas estranhas
+#  vao acontecer
         retorno = con.execute(statement, heroi=id_heroi)  # e usei esse buraco
         heroi = retorno.fetchone()  # pega a primeira linha do resultado
-        if heroi == None:  # se nao tinha nenhuma linha,
+        if not heroi:  # if heroi == None:se nao tinha nenhuma linha,
             # jogador vale None
             # (None tb aparece quando a gente
             # já leu várias linhas e acabou

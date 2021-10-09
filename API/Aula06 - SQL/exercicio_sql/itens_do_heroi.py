@@ -1,5 +1,6 @@
 from sqlalchemy import text
 from sqlalchemy import create_engine
+from itens import consultar_item
 
 engine = create_engine('sqlite:///rpg.db')
 
@@ -25,7 +26,7 @@ def heroi_quantos_itens(id_heroi):
         tapa_buraco = conexao.execute(query, idHeroi=id_heroi)
         herois = tapa_buraco.fetchone()
         cont = 0
-        while herois != None:
+        while herois is not None:  # while herois != None:
             if dict(herois)['idHeroi'] == id_heroi:
                 cont += 1
                 herois = tapa_buraco.fetchone()
@@ -52,12 +53,9 @@ def itens_em_uso_por_nome_do_heroi(nome_heroi):
         itens_uso = exec_query.fetchall()
         for x in itens_uso:
             if x['emUso'] == 1:
-                print(x)
-                lista.append(dict(x))
+                lista.append(consultar_item(x['idItem']))
         if len(lista) < 2:
-            print(lista)
             return lista
-
         else:
             lista = []
 

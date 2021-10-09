@@ -51,7 +51,7 @@ dados2018 = pega_dados()
 #  print('todas as chaves do dicionario principal', dados2018.keys())
 
 #  print('dados do time corinthians')
-pprint(dados2018['equipes']['6'])
+#  pprint(dados2018['equipes']['6'])
 
 #  pprint(dados2018['equipes'])
 #  print('esses foram os dados de todos os times')
@@ -287,7 +287,15 @@ o número de vezes que um jogo ocorreu no estádio
 
 
 def dicionario_id_estadio_e_nro_jogos(dados):
-    total_jogos_por_estadio = {}
+    dic_jogos = dict()
+    jogos = dados['fases']['2700']['jogos']['id']
+    for jogo in jogos:
+        id = dados['fases']['2700']['jogos']['id'][jogo]['estadio_id']
+        if id not in dic_jogos:
+            dic_jogos[id] = 1
+        else:
+            dic_jogos[id] += 1
+    return dic_jogos
 
 
 '''
@@ -387,12 +395,6 @@ Se a id nao for valida, ela retorna a string 'nao encontrado'
 
 
 def classificacao_do_time_por_id(dados, time_id):
-    pass
-
-
-try:
-    from brasileirao_gabarito import *
-except:
     pass
 
 

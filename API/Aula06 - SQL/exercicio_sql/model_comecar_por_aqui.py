@@ -1,6 +1,12 @@
-import unittest, random, shutil, hashlib, herois, itens
+import unittest
+import random
+import shutil
+import herois
+import itens
 import itens_do_heroi
-from herois import HeroiNaoExisteException, consultar_heroi, consultar_heroi_por_nome
+from math import floor
+from itens_do_heroi import itens_em_uso_por_nome_do_heroi
+from herois import HeroiNaoExisteException, consultar_heroi_por_nome
 from itens import ItemNaoExisteException
 
 '''
@@ -106,12 +112,8 @@ no arquivo herois
 '''
 
 
-#  def heroi_pronto_por_nome(nomeHeroi):
-#     heroi = consultar_heroi_por_nome(nomeHeroi)
-#     heroi['vida'] = heroi['fisico'] * 10
-#     return heroi
 def heroi_pronto_por_nome(nomeHeroi):
-    item = itens_do_heroi.itens_em_uso_por_nome_do_heroi(nomeHeroi)
+    item = itens_em_uso_por_nome_do_heroi(nomeHeroi)
     heroi = consultar_heroi_por_nome(nomeHeroi)
     heroi['vida'] = heroi['fisico'] * 10
     if item != []:
@@ -150,7 +152,9 @@ Repare que a funcao recebe dicionários, e nem fala com o SQL
 
 
 def atacar_com_fisico(atacante, defensor):
-    defensor.update({'vida': defensor['vida'] - atacante['fisico']})
+    newlife = defensor['vida'] - \
+        atacante['fisico'] if defensor['vida'] > atacante['fisico'] else 0
+    defensor.update({'vida': newlife})
     pass
 
 
@@ -179,10 +183,12 @@ Repare que a vida nunca pode ficar negativa. O mínimo é 0.
 
 
 def atacar_com_magia(atacante, defensor):
-    newlife = defensor['vida'] - \
-        atacante['magia'] if defensor['vida'] > atacante['magia'] else 0
-    defensor.update({'vida': newlife})
-    pass
+    n_attack = floor(atacante['agilidade'] / defensor['agilidade']) if floor(atacante['agilidade'] / defensor['agilidade']) > 1 else 1
+    for x in range(n_attack):
+        newlife = defensor['vida'] - \
+            atacante['magia'] if defensor['vida'] > atacante['magia'] else 0
+        defensor.update({'vida': newlife})
+        pass
 
 
 '''
@@ -314,6 +320,7 @@ Se der 1 ou menos, o atacante conseguirá fazer exatamente 1 ataque.
 Fazer um ataque 2 vezes significa dar duas vezes o dano:
 Se harry tem 7 de magia e vai atacar 2 vezes, dará 14 de dano
 '''
+
 '''
 Parte 3: Editar os valores do banco de dados
 

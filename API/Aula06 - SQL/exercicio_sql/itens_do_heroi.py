@@ -58,8 +58,3 @@ def itens_em_uso_por_nome_do_heroi(nome_heroi):
             return lista
         else:
             lista = []
-
-
-if __name__ == '__main__':
-    itens = itens_em_uso_por_nome_do_heroi('harry')
-    print(itens[0]['magia'])

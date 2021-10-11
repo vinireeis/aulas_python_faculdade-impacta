@@ -17,9 +17,6 @@ class HeroiNaoExisteException(Exception):
 def heroi_existe(id_heroi):
     with engine.connect() as con:
         statement = text("SELECT * FROM Heroi WHERE id = :heroi")
-# :jogador -> buraco que vai ser preenchido quando eu chamar con.execute
-# :jogador -> O ":" marca o buraco. Sem ":" nao tem buraco, e coisas estranhas
-#  vao acontecer
         retorno = con.execute(statement, heroi=id_heroi)  # e usei esse buraco
         heroi = retorno.fetchone()  # pega a primeira linha do resultado
         if not heroi:  # if heroi == None:se nao tinha nenhuma linha,
@@ -53,11 +50,3 @@ def consultar_heroi_por_nome(nome_heroi):
         else:
             nomes_heroi = nomes_heroi[0]
             return dict(nomes_heroi)
-
-# def atacar_com_fisico(atacante, defensor):
-# defensor['vida'] = atacante['fisico'] - defensor['vida']
-
-
-'''x = consultar_heroi_por_nome('harry')
-x['vida'] = x['fisico'] * 10
-print(x)'''

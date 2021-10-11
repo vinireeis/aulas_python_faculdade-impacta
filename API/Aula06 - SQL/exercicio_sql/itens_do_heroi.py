@@ -58,3 +58,11 @@ def itens_em_uso_por_nome_do_heroi(nome_heroi):
             return lista
         else:
             lista = []
+
+
+def dar_item_para_heroi(item, heroi):
+    id_item = item['id']
+    id_heroi = heroi['id']
+    with engine.connect() as conexao:
+        insert_db = text("INSERT INTO ItemDoHeroi (iditem, idheroi) VALUES (:a, :b)")
+        conexao.execute(insert_db, a=id_item, b=id_heroi)

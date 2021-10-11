@@ -1,7 +1,6 @@
 from sqlalchemy import text
 from sqlalchemy import create_engine
 from itens import consultar_item
-from itens_do_heroi import itens_em_uso_por_nome_do_heroi
 from herois import consultar_heroi_por_nome
 engine = create_engine('sqlite:///rpg.db')
 
@@ -21,6 +20,7 @@ def itens_em_uso_por_nome_do_heroi(nome_heroi):
         else:
             lista = []
 
+
 def heroi_pronto_por_nome(nomeHeroi):
     item = itens_em_uso_por_nome_do_heroi(nomeHeroi)
     heroi = consultar_heroi_por_nome(nomeHeroi)
@@ -32,8 +32,3 @@ def heroi_pronto_por_nome(nomeHeroi):
         heroi['magia'] += item[0]['magia']
         heroi['agilidade'] += item[0]['agilidade']
     return heroi
-
-
-if __name__ == '__main__':
-    #print(itens_em_uso_por_nome_do_heroi("harry"))
-    heroi_pronto_por_nome('harry')

@@ -1,13 +1,23 @@
 import unittest
 import random
 import shutil
+
+from sqlalchemy import text
+from sqlalchemy import create_engine
 import herois
 import itens
 import itens_do_heroi
 from math import floor
-from itens_do_heroi import itens_em_uso_por_nome_do_heroi
+from itens_do_heroi import itens_em_uso_por_nome_do_heroi, dar_item_para_heroi
 from herois import HeroiNaoExisteException, consultar_heroi_por_nome
 from itens import ItemNaoExisteException
+
+
+class OverpowerException(Exception):
+    pass
+
+
+engine = create_engine('sqlite:///rpg.db')
 
 '''
 1) Examine o banco de dados no site https://sqliteonline.com/.
@@ -343,7 +353,13 @@ heroi.py fará o acesso ao banco de dados
 
 
 def criar_heroi(nome, agilidade, fisico, magia):
-    pass
+    power = agilidade + fisico + magia
+    if power > 20:
+        raise OverpowerException
+    with engine.connect() as conexao:
+        query = text("INSERT INTO Heroi (nome, fisico, magia, agilidade) VALUES (:a, :b, :c, :d)")
+        conexao.execute(query, a=nome, b=fisico, c=magia, d=agilidade)
+        pass
 
 
 '''
@@ -377,11 +393,6 @@ repare: omitimos um dos atributos do item, o emUso. Esse atributo
 será inicializado sempre com 0, para representar False
 '''
 
-
-def criar_item(tipo, nome, fisico, agilidade, magia):
-    pass
-
-
 '''
 Ex24 -- repare que voce precisa de duas funcoes para passar esse teste!
 Crie uma funcao dar_item_para_heroi, que faz com que o heroi se
@@ -399,12 +410,7 @@ Lembre-se de manter o codigo sql apenas no arquivo itens_do_heroi
 Alem dessa funcao, para passar o teste relevante, voce precisara
 tambem do proximo exercicio (colocar_item_em_uso)
 '''
-
-
-def dar_item_para_heroi(heroi, item):
-    pass
-
-
+# feito no módulo itens_do_heroi
 '''
 Ex24 -- essa é a segunda função necessária para passar o ex 24
 Crie uma funcao colocar_item_em_uso, que recebe o dicionario do
@@ -420,7 +426,15 @@ class HeroiJaUsaEsseTipoDeItemException(Exception):
 
 
 def colocar_item_em_uso(heroi, item):
-    pass
+    itens = itens_em_uso_por_nome_do_heroi(heroi['nome'])
+    if itens != []:
+        if itens[0]['tipo'] == item['tipo']:
+            raise HeroiJaUsaEsseTipoDeItemException
+    else:
+        id_item = item['id']
+        with engine.connect() as conexao:
+            update_db = text("UPDATE Item SET emUso = 1 WHERE id = :item")
+            conexao.execute(update_db, item=id_item)
 
 
 '''

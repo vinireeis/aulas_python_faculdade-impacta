@@ -415,7 +415,15 @@ ela chumbada da função
 
 
 def rebaixados(dados):
-    pass
+    rebaixados = dados["fases"]["2700"]["faixas-classificacao"]["classifica3"]["faixa"]
+    inicio, final = int(rebaixados.split("-")[0]), int(rebaixados.split("-")[1])
+    times_rebaixados = []
+    while inicio <= final:
+        times_rebaixados.append(
+            dados["fases"]["2700"]["classificacao"]["grupo"]["Único"][inicio - 1]
+        )
+        inicio += 1
+    return times_rebaixados
 
 
 '''
@@ -429,8 +437,11 @@ Se a id nao for valida, ela retorna a string 'nao encontrado'
 
 
 def classificacao_do_time_por_id(dados, time_id):
-    pass
-
+    classificacao = dados['fases']['2700']['classificacao']['grupo']['Único']
+    for x, y in enumerate(classificacao):
+        if time_id == y:
+            return x + 1
+    return 'nao encontrado'
 
 class TestClientes(unittest.TestCase):
 

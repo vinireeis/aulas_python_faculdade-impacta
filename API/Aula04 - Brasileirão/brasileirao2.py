@@ -55,7 +55,7 @@ dados2018 = pega_dados()
 #  print('todas as chaves do dicionario principal', dados2018.keys())
 
 #  print('dados do time corinthians')
-pprint(dados2018['equipes']['6'])
+#  pprint(dados2018['equipes']['6'])
 
 #  pprint(dados2018['equipes'])
 #  print('esses foram os dados de todos os times')
@@ -184,14 +184,14 @@ def nomes_classificados_libertadores(dados):
 def data_de_um_jogo(dados, id_jogo):
     for x in dados['fases']['2700']['jogos']['id']:
         if x == id_jogo:
-            print(dados['fases']['2700']['jogos']['id'][x]['data'])
-        else:
-            print('nao encontrado')
+            pass
+            #  print(dados['fases']['2700']['jogos']['id'][x]['data'])
+    return 'nao encontrado'
 
 
 def busca_imprecisa_por_nome_de_time(dados, nome_time):
     lista = []
-    print(nome_time, "ESSE E O QUE BUSCAMOS")
+    #  print(nome_time, "ESSE E O QUE BUSCAMOS")
     for id in dados['equipes']:
         x = dados['equipes'][id]['nome']
         y = dados['equipes'][id]['nome-comum']
@@ -202,6 +202,33 @@ def busca_imprecisa_por_nome_de_time(dados, nome_time):
     return lista
 
 
+def dicionario_de_gols(dados):
+    dic_gols = {}
+    jogos = dados['fases']['2700']['jogos']['id']
+    for id in jogos:
+        dic = jogos[id]
+        if dic['time1'] not in dic_gols:
+            dic_gols[dic['time1']] = 0
+        if dic['time2'] not in dic_gols:
+            dic_gols[dic['time2']] = 0
+        #print(dic_gols)
+        #print(type(int(dic['placar1'])))
+        #print(int(dic['placar1']))
+        dic_gols[dic['time1']] = dic_gols[dic['time1']] + int(dic['placar1'])
+        dic_gols[dic['time2']] = dic_gols[dic['time2']] + int(dic['placar2'])
+    return dic_gols
+
+
+def time_que_fez_mais_gols(dados):
+    gols = dicionario_de_gols(dados)
+    x = gols[max(gols, key=gols.keys)]
+    print("ESTE E O X\n", x)
+
+
+
 if __name__ == '__main__':
-    x = busca_imprecisa_por_nome_de_time(dados2018, 'anto')
-    print(x)
+#     # x = busca_imprecisa_por_nome_de_time(dados2018, 'anto')
+#     # print(x)
+#     #x = dicionario_de_gols(dados2018)
+#     # print("ESTE E O X\n", x)
+    a = time_que_fez_mais_gols(dados2018)

@@ -338,12 +338,11 @@ def ids_de_jogos_de_um_time(dados, time_id):
     lista_ids = list()
     jogos = dados['fases']['2700']['jogos']['id']
     for id in jogos:
-        time1 = dados['fases']['2700']['jogos']['id'][id]['time1']
-        time2 = dados['fases']['2700']['jogos']['id'][id]['time2']
+        time1 = jogos[id]['time1']
+        time2 = jogos[id]['time2']
         if time_id in time1 or time_id in time2:
             lista_ids.append(id)
     return lista_ids
-
 
 
 '''
@@ -357,8 +356,14 @@ Ela retorna uma lista das datas em que o time jogou
 
 
 def datas_de_jogos_de_um_time(dados, nome_time):
-    pass
-
+    lista_datas = list()
+    id = id_do_time(dados, nome_time)
+    ids_jogos = ids_de_jogos_de_um_time(dados, id)
+    jogos = dados['fases']['2700']['jogos']['id']
+    for id in jogos:
+        if id in ids_jogos:
+            lista_datas.append(jogos[id]['data'])
+    return lista_datas
 
 '''
 A proxima funcao recebe apenas o dicionario dos dados do brasileirao
@@ -371,7 +376,17 @@ e o valor associado ao '17' é o numero de gols total que o palmeiras fez.
 
 
 def dicionario_de_gols(dados):
-    pass
+    dic_gols = {}
+    jogos = dados['fases']['2700']['jogos']['id']
+    for id in jogos:
+        dic = jogos[id]
+        if dic['time1'] not in dic_gols:
+            dic_gols[dic['time1']] = 0
+        if dic['time2'] not in dic_gols:
+            dic_gols[dic['time2']] = 0
+        dic_gols[dic['time1']] = dic_gols[dic['time1']] + int(dic['placar1'])
+        dic_gols[dic['time2']] = dic_gols[dic['time2']] + int(dic['placar2'])
+    return dic_gols
 
 
 '''
@@ -382,7 +397,10 @@ Ela devolve a id do time que fez mais gols no campeonato
 
 
 def time_que_fez_mais_gols(dados):
-    pass
+    gols = dicionario_de_gols(dados)
+    #return max(gols, key=lambda i: gols[i])
+    return max(gols, key=gols.get)
+
 
 
 '''

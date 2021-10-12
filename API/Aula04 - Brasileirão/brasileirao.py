@@ -443,6 +443,7 @@ def classificacao_do_time_por_id(dados, time_id):
             return x + 1
     return 'nao encontrado'
 
+
 class TestClientes(unittest.TestCase):
 
     def test_000_nome_do_time(self):

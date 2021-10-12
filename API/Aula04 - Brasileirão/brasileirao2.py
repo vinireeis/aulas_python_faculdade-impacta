@@ -189,6 +189,19 @@ def data_de_um_jogo(dados, id_jogo):
             print('nao encontrado')
 
 
-f = pega_dados()
+def busca_imprecisa_por_nome_de_time(dados, nome_time):
+    lista = []
+    print(nome_time, "ESSE E O QUE BUSCAMOS")
+    for id in dados['equipes']:
+        x = dados['equipes'][id]['nome']
+        y = dados['equipes'][id]['nome-comum']
+        z = dados['equipes'][id]['nome-slug']
+        w = dados['equipes'][id]['sigla']
+        if nome_time in x or nome_time in y or nome_time in z or nome_time in w:
+            lista.append(dados['equipes'][id]['id'])
+    return lista
 
-data_de_um_jogo(f, '102132')
+
+if __name__ == '__main__':
+    x = busca_imprecisa_por_nome_de_time(dados2018, 'anto')
+    print(x)

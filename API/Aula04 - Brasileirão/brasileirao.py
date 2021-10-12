@@ -314,7 +314,16 @@ com a pesquisa (e pode ser vazia, se não achar ninguém)
 
 
 def busca_imprecisa_por_nome_de_time(dados, nome_time):
-    pass
+    lista = []
+    for id in dados['equipes']:
+        x = dados['equipes'][id]['nome']
+        y = dados['equipes'][id]['nome-comum']
+        z = dados['equipes'][id]['nome-slug']
+        w = dados['equipes'][id]['sigla']
+        if nome_time in x or nome_time in y or nome_time in z or nome_time in w:
+            lista.append(dados['equipes'][id]['id'])
+    return lista
+
 
 # ids dos jogos de um time
 

@@ -335,7 +335,15 @@ e retornar as ids de todos os jogos em que ele participou
 
 
 def ids_de_jogos_de_um_time(dados, time_id):
-    pass
+    lista_ids = list()
+    jogos = dados['fases']['2700']['jogos']['id']
+    for id in jogos:
+        time1 = dados['fases']['2700']['jogos']['id'][id]['time1']
+        time2 = dados['fases']['2700']['jogos']['id'][id]['time2']
+        if time_id in time1 or time_id in time2:
+            lista_ids.append(id)
+    return lista_ids
+
 
 
 '''

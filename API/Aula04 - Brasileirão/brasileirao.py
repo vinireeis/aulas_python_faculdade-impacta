@@ -398,9 +398,8 @@ Ela devolve a id do time que fez mais gols no campeonato
 
 def time_que_fez_mais_gols(dados):
     gols = dicionario_de_gols(dados)
-    #return max(gols, key=lambda i: gols[i])
+    #  return max(gols, key=lambda i: gols[i])
     return max(gols, key=gols.get)
-
 
 
 '''

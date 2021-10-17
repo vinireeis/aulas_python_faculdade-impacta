@@ -75,13 +75,13 @@ def delete_aluno_por_id(id_aluno):
     return aluno
 
 
-@app.route("/aluno/<int:id_aluno>", methods=['PUT'])
+@app.route("/alunos/<int:id_aluno>", methods=['PUT'])
 def edita_aluno_por_id(id_aluno):
     dic_update = request.json
     try:
         aluno = busca_aluno_por_id(id_aluno)
     except AlunoNaoExiste:
-        return 'aluno nao encontrado', 400
+        return ({'erro': 'aluno nao encontrado'}, 400)
     aluno['nome'] = dic_update['nome']
     return aluno
 

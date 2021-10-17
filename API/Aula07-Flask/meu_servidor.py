@@ -1,6 +1,10 @@
 from flask import Flask, jsonify, request
 
 
+class AlunoNaoExiste(Exception):
+    pass
+
+
 app = Flask(__name__)
 
 
@@ -8,24 +12,27 @@ app = Flask(__name__)
 def hello():
     return "Hello World!"
 
-
-@app.route("/pizzas")
-def pizzas():
-    return "mussarela, catufrango, pepperoni"
-
-
-lista = ['lucas', 'vinicius', 'thais']
-
-
-@app.route("/pessoas")
-def pessoas():
-    return jsonify(lista)
+# @app.route("/pizzas")
+# def pizzas():
+#     return "mussarela, catufrango, pepperoni"
+# lista = ['lucas', 'vinicius', 'thais']
+# @app.route("/pessoas")
+# def pessoas():
+#     return jsonify(lista)
 
 
 todas_pessoas = {
     "alunos": [{"nome": "beatriz", "id": 12}, {"nome": "Vinicius", "id": 11}],
     "professores": []
     }
+
+
+def busca_aluno_por_id(id_aluno):
+    lista_alunos = todas_pessoas['alunos']
+    for aluno in lista_alunos:
+        if aluno['id'] == id_aluno:
+            return aluno
+    raise AlunoNaoExiste
 
 
 @app.route("/alunos")  # se não escrever o padrão é methods=['GET']
@@ -44,17 +51,39 @@ def post_alunos():
 
 @app.route("/alunos/<int:id_aluno>", methods=['GET'])
 def get_aluno_por_id(id_aluno):
-    if (id_aluno >= 1000 * 1000):
-        return ('use apenas nros menores que 1 milhão', 400)
-    for aluno in todas_pessoas["alunos"]:
-        if aluno['id'] == id_aluno:
-            return aluno
+    try:
+        aluno = busca_aluno_por_id(id_aluno)
+    except AlunoNaoExiste:
+        return 'aluno nao encontrado', 400
+    return aluno
 
 
 @app.route("/reseta", methods=['POST'])
 def reseta():
     todas_pessoas["alunos"].clear()
-    return 'bla'
+    return 'blag'
+
+
+@app.route("/alunos/<int:id_aluno>", methods=['DELETE'])
+def delete_aluno_por_id(id_aluno):
+    try:
+        aluno = busca_aluno_por_id(id_aluno)
+    except AlunoNaoExiste:
+        return ({'erro': 'aluno nao encontrado'}, 400)
+    lista_alunos = todas_pessoas['alunos']
+    lista_alunos.remove(aluno)
+    return aluno
+
+
+@app.route("/aluno/<int:id_aluno>", methods=['PUT'])
+def edita_aluno_por_id(id_aluno):
+    dic_update = request.json
+    try:
+        aluno = busca_aluno_por_id(id_aluno)
+    except AlunoNaoExiste:
+        return 'aluno nao encontrado', 400
+    aluno['nome'] = dic_update['nome']
+    return aluno
 
 
 if __name__ == '__main__':

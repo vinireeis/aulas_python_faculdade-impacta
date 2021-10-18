@@ -1,7 +1,6 @@
 import unittest
 import random
 import shutil
-
 from sqlalchemy import text
 from sqlalchemy import create_engine
 import herois

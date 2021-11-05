@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, json, jsonify, request
 
 
 class AlunoNaoExiste(Exception):
@@ -44,7 +44,7 @@ def busca_professor_por_id(id_professor):
     for prof in lista_professores:
         if prof['id'] == id_professor:
             return prof
-    raise AlunoNaoExiste
+    raise ProfessorNaoExiste
 
 
 @app.route("/alunos")  # se não escrever o padrão é methods=['GET']
@@ -123,9 +123,14 @@ def get_professor_por_id(id_professor):
 @app.route("/professores", methods=['POST'])
 def post_professores():
     dic_professor = request.json
-    dic_professores = todas_pessoas['professores']
-    dic_professores.append(dic_professor)
-    return jsonify(todas_pessoas['professores'])
+    if 'nome' in dic_professor:
+        dic_professores = todas_pessoas['professores']
+        for prof in dic_professores:
+            if prof['id'] == dic_professor['id']:
+                return ({'erro': 'id ja utilizada'}, 400)
+        dic_professores.append(dic_professor)
+        return jsonify(todas_pessoas['professores'])
+    return ({'erro': 'professor sem nome'}, 400)
 
 
 @app.route("/professores/reseta", methods=['POST'])
@@ -133,6 +138,29 @@ def reseta_professores():
     todas_pessoas['professores'] = []
     return 'dados de professores resetados'
 
+
+@app.route("/professores/<int:id_professor>", methods=['DELETE'])
+def deleta_prof_por_id(id_professor):
+    try:
+        prof = busca_professor_por_id(id_professor)
+        lista_prof = todas_pessoas['professores']
+        lista_prof.remove(prof)
+        return jsonify(lista_prof)
+    except ProfessorNaoExiste:
+        return ({'erro': 'professor nao encontrado'}, 400)
+
+
+@app.route("/professores/<int:id_professor>", methods=['PUT'])
+def edita_prof_por_id(id_professor):
+    dic_prof = request.json
+    if 'nome' in dic_prof:
+        try:
+            prof = busca_professor_por_id(id_professor)
+        except ProfessorNaoExiste:
+            return ({'erro': 'professor nao encontrado'}, 400)
+        prof['nome'] = dic_prof['nome']
+        return prof
+    return ({'erro': 'professor sem nome'}, 400)
 
 # @app.route("/professores", methods=['POST'])
 # def post_professores():

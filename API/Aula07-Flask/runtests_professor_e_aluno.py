@@ -4,7 +4,7 @@ import unittest
 class TestStringMethods(unittest.TestCase):
 
 
-    def atest_000_alunos_retorna_lista(self):
+    def test_000_alunos_retorna_lista(self):
         #pega a url /alunos, com o verbo get
         r = requests.get('http://localhost:5002/alunos')
 
@@ -334,7 +334,7 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(r.json()['erro'],'id ja utilizada')
 
     def test_108_post_ou_put_sem_nome(self):
-        r_reset = requests.post('http://localhost:5002/reseta')
+        r_reset = requests.post('http://localhost:5002/professores/reseta')
         self.assertEqual(r_reset.status_code,200)
         r = requests.post('http://localhost:5002/professores',json={'id':8})
         self.assertEqual(r.status_code,400)
@@ -346,7 +346,7 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual(r.json()['erro'],'professor sem nome')
 
     def test_109_nao_confundir_professor_e_aluno(self):
-        r_reset = requests.post('http://localhost:5002/reseta')
+        r_reset = requests.post('http://localhost:5002/professores/reseta')
         r = requests.post('http://localhost:5002/professores',json={'nome':'fernando','id':1})
         self.assertEqual(r.status_code,200)
         r = requests.post('http://localhost:5002/professores',json={'nome':'roberto','id':2})

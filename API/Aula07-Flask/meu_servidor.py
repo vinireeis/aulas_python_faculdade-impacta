@@ -5,6 +5,10 @@ class AlunoNaoExiste(Exception):
     pass
 
 
+class ProfessorNaoExiste(Exception):
+    pass
+
+
 app = Flask(__name__)
 
 
@@ -35,6 +39,14 @@ def busca_aluno_por_id(id_aluno):
     raise AlunoNaoExiste
 
 
+def busca_professor_por_id(id_professor):
+    lista_professores = todas_pessoas['professores']
+    for prof in lista_professores:
+        if prof['id'] == id_professor:
+            return prof
+    raise AlunoNaoExiste
+
+
 @app.route("/alunos")  # se não escrever o padrão é methods=['GET']
 def get_alunos():
     return jsonify(todas_pessoas["alunos"])
@@ -43,10 +55,16 @@ def get_alunos():
 @app.route("/alunos", methods=['POST'])
 def post_alunos():
     dic_aluno = request.json  # {"nome":"lucas", "id":11212}
-    lista_alunos = todas_pessoas["alunos"]
-    lista_alunos.append(dic_aluno)
-    # todas_pessoas["alunos"].append(dic_aluno)
-    return jsonify(todas_pessoas["alunos"])
+    if 'nome' in dic_aluno:
+        lista_alunos = todas_pessoas["alunos"]
+        for aluno in lista_alunos:
+            if aluno['id'] == dic_aluno['id']:
+                return ({'erro': 'id ja utilizada'}, 400)
+        lista_alunos.append(dic_aluno)
+        # todas_pessoas["alunos"].append(dic_aluno)
+        # return 'adcionado com sucesso'
+        return jsonify(todas_pessoas["alunos"])
+    return ({'erro': 'aluno sem nome'}, 400)
 
 
 @app.route("/alunos/<int:id_aluno>", methods=['GET'])
@@ -54,14 +72,14 @@ def get_aluno_por_id(id_aluno):
     try:
         aluno = busca_aluno_por_id(id_aluno)
     except AlunoNaoExiste:
-        return 'aluno nao encontrado', 400
+        return ({'erro': 'aluno nao encontrado'}, 400)
     return aluno
 
 
 @app.route("/reseta", methods=['POST'])
 def reseta():
     todas_pessoas["alunos"].clear()
-    return 'blag'
+    return ''
 
 
 @app.route("/alunos/<int:id_aluno>", methods=['DELETE'])
@@ -78,12 +96,55 @@ def delete_aluno_por_id(id_aluno):
 @app.route("/alunos/<int:id_aluno>", methods=['PUT'])
 def edita_aluno_por_id(id_aluno):
     dic_update = request.json
+    if 'nome' in dic_update:
+        try:
+            aluno = busca_aluno_por_id(id_aluno)
+        except AlunoNaoExiste:
+            return ({'erro': 'aluno nao encontrado'}, 400)
+        aluno['nome'] = dic_update['nome']
+        return aluno
+    return ({'erro': 'aluno sem nome'}, 400)
+
+
+@app.route("/professores", methods=['GET'])
+def get_professores():
+    return jsonify(todas_pessoas['professores'])
+
+
+@app.route("/professores/<int:id_professor>", methods=['GET'])
+def get_professor_por_id(id_professor):
     try:
-        aluno = busca_aluno_por_id(id_aluno)
-    except AlunoNaoExiste:
-        return ({'erro': 'aluno nao encontrado'}, 400)
-    aluno['nome'] = dic_update['nome']
-    return aluno
+        prof = busca_professor_por_id(id_professor)
+    except ProfessorNaoExiste:
+        return ({'erro': 'professor nao encontrado'}, 400)
+    return prof
+
+
+@app.route("/professores", methods=['POST'])
+def post_professores():
+    dic_professor = request.json
+    dic_professores = todas_pessoas['professores']
+    dic_professores.append(dic_professor)
+    return jsonify(todas_pessoas['professores'])
+
+
+@app.route("/professores/reseta", methods=['POST'])
+def reseta_professores():
+    todas_pessoas['professores'] = []
+    return 'dados de professores resetados'
+
+
+# @app.route("/professores", methods=['POST'])
+# def post_professores():
+#     dic_professor = request.json if request.json['nome'] is not None else False
+#     if dic_professor:
+#         dic_professores = todas_pessoas['professores']
+#         for professor in dic_professores:
+#             if professor['id'] == dic_professor['id']:
+#                 return ({'erro': 'id ja utilizada'}, 400)
+#         dic_professores.append(dic_professor)
+#         return jsonify(todas_pessoas['professores'])
+#     return ({'erro': 'aluno sem nome'}, 400)
 
 
 if __name__ == '__main__':

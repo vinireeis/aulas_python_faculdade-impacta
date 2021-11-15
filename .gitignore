@@ -140,3 +140,4 @@ cython_debug/
 # Vscode
 .vscode/
 .mypy_cache/
+.idea/

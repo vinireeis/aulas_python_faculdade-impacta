@@ -24,7 +24,6 @@ def localiza_pessoa(id_pessoa):
 
 def reseta():
     database["PESSOAS"] = []
-    return 'r'
 
 
 def adiciona_pessoa(dic_pessoa):

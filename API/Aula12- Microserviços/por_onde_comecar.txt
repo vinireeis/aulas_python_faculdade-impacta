@@ -1,0 +1,12 @@
+a atividade se inicia no controle pessoas. 
+Depois vai para o acesso.py e depois para o sistema atividades
+
+Primeiro, temos um servidor controle_pessoas (flask)
+
+Depois, o arquivo acesso.py, que usa a biblioteca requests para
+conversar com o controle_pessoas. (faz o serviço do firefox, ou do postman)
+
+Depois, o sistema atividades (tb feito em flask)
+que faz import no acesso.py. Ou seja: um servidor que faz pedidos
+(requisições) para o controle_pessoas, usando a biblioteca requests
+(faz essas requisições através do acesso.py)
